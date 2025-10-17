@@ -46,3 +46,22 @@
     <!-- Cart panel -->
     <div id="cart" class="cart">
       <h2>Cart</h2>
+      <ul id="cart-items"></ul>
+      <p>Total Weight: <span id="cart-total-weight">0</span> kg</p>
+    </div>
+
+    <!-- Customer Info -->
+    <form id="order-form">
+      <h2>Customer Details</h2>
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="tel" id="phone" placeholder="Phone Number" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <select id="delivery">
+        <option value="pickup">Pickup</option>
+        <option value="hotel">Deliver to Hotel</option>
+      </select>
+      <button type="submit">Submit Order</button>
+    </form>
+  </div>
+</body>
+</html>

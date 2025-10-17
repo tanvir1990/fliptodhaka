@@ -65,4 +65,83 @@ function updateTotals() {
     const idx = input.dataset.idx;
     if (qty > 0) {
       const p = products[idx];
-      cart[idx] = { ...p, qty }
+      cart[idx] = { ...p, qty };
+      totalCAD += qty * p['Item Price CAD'];
+      totalBDT += qty * p['Item Price CAD'] * rate;
+      totalWeight += qty * p['Item Weight'];
+    }
+  });
+
+  renderCart();
+}
+
+function renderCart() {
+  const cartItems = document.getElementById('cart-items');
+  cartItems.innerHTML = '';
+  Object.values(cart).forEach(p => {
+    const li = document.createElement('li');
+    li.textContent = `${p['Item Name']} x ${p.qty} = ${(p['Item Price CAD']*p.qty).toFixed(2)} CAD`;
+    cartItems.appendChild(li);
+  });
+
+  document.getElementById('cart-count').innerText = Object.keys(cart).length;
+  document.getElementById('cart-total-cad').innerText = totalCAD.toFixed(2);
+  document.getElementById('cart-total-bdt').innerText = totalBDT.toFixed(2);
+  document.getElementById('cart-total-weight').innerText = totalWeight.toFixed(2);
+}
+
+// Apply filters
+document.getElementById('apply-filters').addEventListener('click', () => {
+  const category = document.getElementById('filter-category').value;
+  const maxWeight = parseFloat(document.getElementById('filter-weight').value);
+  const maxPrice = parseFloat(document.getElementById('filter-price').value);
+
+  let filtered = [...products];
+  if (category !== 'all') filtered = filtered.filter(p => p['Item Category'] === category);
+  if (!isNaN(maxWeight)) filtered = filtered.filter(p => p['Item Weight'] <= maxWeight);
+  if (!isNaN(maxPrice)) filtered = filtered.filter(p => p['Item Price CAD'] <= maxPrice);
+
+  renderProducts(filtered);
+});
+
+// Order form submission
+document.getElementById('order-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (Object.keys(cart).length === 0) {
+    alert('Please select at least one product.');
+    return;
+  }
+
+  const form = e.target;
+  const orderData = {
+    name: form.name.value,
+    email: form.email.value,
+    phone: form.phone.value,
+    deliveryMethod: form.delivery.value,
+    totalCAD: totalCAD.toFixed(2),
+    totalBDT: totalBDT.toFixed(2),
+    totalWeight: totalWeight.toFixed(2),
+    orderDetails: JSON.stringify(Object.values(cart), null, 2)
+  };
+
+  try {
+    const res = await fetch('/api/send-order', {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orderData)
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert('✅ Order submitted! You will receive confirmation via email.');
+      form.reset();
+      updateTotals();
+    } else {
+      console.error(data);
+      alert('❌ Failed to send order. Please try again.');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('⚠️ Something went wrong. Please try again later.');
+  }
+});
