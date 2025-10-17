@@ -75,15 +75,8 @@ function updateTotals() {
   renderCart();
 }
 
+// Render sticky bottom cart totals
 function renderCart() {
-  const cartItems = document.getElementById('cart-items');
-  cartItems.innerHTML = '';
-  Object.values(cart).forEach(p => {
-    const li = document.createElement('li');
-    li.textContent = `${p['Item Name']} x ${p.qty} = ${(p['Item Price CAD']*p.qty).toFixed(2)} CAD`;
-    cartItems.appendChild(li);
-  });
-
   document.getElementById('cart-count').innerText = Object.keys(cart).length;
   document.getElementById('cart-total-cad').innerText = totalCAD.toFixed(2);
   document.getElementById('cart-total-bdt').innerText = totalBDT.toFixed(2);

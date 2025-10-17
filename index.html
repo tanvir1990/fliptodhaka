@@ -14,11 +14,6 @@
   <div class="container">
     <header>
       <h1>FlipToDhaka Order Form</h1>
-      <div id="cart-summary">
-        🛒 <span id="cart-count">0</span> items | 
-        <span id="cart-total-cad">0</span> CAD / 
-        <span id="cart-total-bdt">0</span> BDT
-      </div>
     </header>
 
     <!-- Exchange rate -->
@@ -43,13 +38,6 @@
     <!-- Products -->
     <div id="product-list" class="product-list"></div>
 
-    <!-- Cart panel -->
-    <div id="cart" class="cart">
-      <h2>Cart</h2>
-      <ul id="cart-items"></ul>
-      <p>Total Weight: <span id="cart-total-weight">0</span> kg</p>
-    </div>
-
     <!-- Customer Info -->
     <form id="order-form">
       <h2>Customer Details</h2>
@@ -63,5 +51,7 @@
       <button type="submit">Submit Order</button>
     </form>
   </div>
-</body>
-</html>
+
+  <!-- Sticky cart summary at bottom -->
+  <div id="cart-summary">
+    <
