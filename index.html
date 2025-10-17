@@ -21,27 +21,35 @@
       <label>Exchange Rate (1 CAD = <input type="number" id="rate" value="95"> BDT)</label>
     </div>
 
-    <!-- Filters and Sorting -->
-    <div class="filters">
+    <!-- Filters, Sorting, View Style -->
+    <div class="controls">
       <label>Filter by Category:
         <select id="filter-category"><option value="all">All</option></select>
       </label>
 
       <label>Sort by:
         <select id="sort-criteria">
-          <option value="none">None</option>
-          <option value="weight-asc">Weight ↑</option>
-          <option value="weight-desc">Weight ↓</option>
-          <option value="priceCAD-asc">Price CAD ↑</option>
-          <option value="priceCAD-desc">Price CAD ↓</option>
-          <option value="priceBDT-asc">Price BDT ↑</option>
-          <option value="priceBDT-desc">Price BDT ↓</option>
+          <option value="default">Default</option>
+          <option value="weight-asc">Weight: Low to High</option>
+          <option value="weight-desc">Weight: High to Low</option>
+          <option value="priceCAD-asc">Price CAD: Low to High</option>
+          <option value="priceCAD-desc">Price CAD: High to Low</option>
+          <option value="priceBDT-asc">Price BDT: Low to High</option>
+          <option value="priceBDT-desc">Price BDT: High to Low</option>
+        </select>
+      </label>
+
+      <label>View Style:
+        <select id="view-style">
+          <option value="thumbnail">Thumbnail</option>
+          <option value="tile">Tile</option>
+          <option value="list">List</option>
         </select>
       </label>
     </div>
 
     <!-- Products -->
-    <div id="product-list" class="product-list"></div>
+    <div id="product-list" class="product-list thumbnail"></div>
 
     <!-- Customer Info -->
     <form id="order-form">

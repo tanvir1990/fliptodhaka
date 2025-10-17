@@ -1,14 +1,17 @@
 let products = [];
+let originalProducts = [];
 let cart = {};
 let totalCAD = 0, totalBDT = 0, totalWeight = 0;
+let viewStyle = 'thumbnail';
 
-// Load products from CSV
+// Load products
 document.addEventListener('DOMContentLoaded', async () => {
   const response = await fetch('products.csv');
   const text = await response.text();
   products = Papa.parse(text, { header: true, skipEmptyLines: true }).data;
 
-  // Convert numeric values
+  originalProducts = [...products]; // keep original order
+
   products.forEach(p => {
     p['Item Price CAD'] = parseFloat(p['Item Price CAD']) || 0;
     p['Item Price BDT'] = parseFloat(p['Item Price BDT']) || 0;
@@ -16,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   populateCategoryFilter();
-  applyFilterAndSort();
+  applyFilterSortView();
 });
 
 // Populate category filter
@@ -35,6 +38,8 @@ function populateCategoryFilter() {
 function renderProducts(list) {
   const container = document.getElementById('product-list');
   container.innerHTML = '';
+  container.className = `product-list ${viewStyle}`;
+
   list.forEach((p, i) => {
     const div = document.createElement('div');
     div.className = 'product';
@@ -49,14 +54,12 @@ function renderProducts(list) {
   });
 }
 
-// Get exchange rate
-function getRate() {
-  return parseFloat(document.getElementById('rate').value) || 1;
-}
+// Exchange rate
+function getRate() { return parseFloat(document.getElementById('rate').value) || 1; }
 
 // Update totals
 function updateTotals() {
-  totalCAD = 0; totalBDT = 0; totalWeight = 0;
+  totalCAD = totalBDT = totalWeight = 0;
   cart = {};
   const rate = getRate();
 
@@ -75,7 +78,6 @@ function updateTotals() {
   renderCart();
 }
 
-// Render sticky bottom cart totals
 function renderCart() {
   document.getElementById('cart-count').innerText = Object.keys(cart).length;
   document.getElementById('cart-total-cad').innerText = totalCAD.toFixed(2);
@@ -83,85 +85,57 @@ function renderCart() {
   document.getElementById('cart-total-weight').innerText = totalWeight.toFixed(2);
 }
 
-// Apply filter and sort (live)
-function applyFilterAndSort() {
+// Filter + Sort + View
+function applyFilterSortView() {
   let filtered = [...products];
 
-  // Filter by category
+  // Filter
   const category = document.getElementById('filter-category').value;
   if (category !== 'all') filtered = filtered.filter(p => p['Item Category'] === category);
 
   // Sort
   const sort = document.getElementById('sort-criteria').value;
   switch(sort) {
-    case 'weight-asc':
-      filtered.sort((a,b) => a['Item Weight'] - b['Item Weight']);
-      break;
-    case 'weight-desc':
-      filtered.sort((a,b) => b['Item Weight'] - a['Item Weight']);
-      break;
-    case 'priceCAD-asc':
-      filtered.sort((a,b) => a['Item Price CAD'] - b['Item Price CAD']);
-      break;
-    case 'priceCAD-desc':
-      filtered.sort((a,b) => b['Item Price CAD'] - a['Item Price CAD']);
-      break;
-    case 'priceBDT-asc':
-      filtered.sort((a,b) => (a['Item Price CAD']*getRate()) - (b['Item Price CAD']*getRate()));
-      break;
-    case 'priceBDT-desc':
-      filtered.sort((a,b) => (b['Item Price CAD']*getRate()) - (a['Item Price CAD']*getRate()));
-      break;
-    default:
-      break;
+    case 'weight-asc': filtered.sort((a,b)=>a['Item Weight']-b['Item Weight']); break;
+    case 'weight-desc': filtered.sort((a,b)=>b['Item Weight']-a['Item Weight']); break;
+    case 'priceCAD-asc': filtered.sort((a,b)=>a['Item Price CAD']-b['Item Price CAD']); break;
+    case 'priceCAD-desc': filtered.sort((a,b)=>b['Item Price CAD']-a['Item Price CAD']); break;
+    case 'priceBDT-asc': filtered.sort((a,b)=>a['Item Price CAD']*getRate()-b['Item Price CAD']*getRate()); break;
+    case 'priceBDT-desc': filtered.sort((a,b)=>b['Item Price CAD']*getRate()-a['Item Price CAD']*getRate()); break;
+    case 'default': filtered = [...originalProducts]; break;
   }
 
   renderProducts(filtered);
 }
 
-// Event listeners for live filter/sort updates
-document.getElementById('filter-category').addEventListener('change', applyFilterAndSort);
-document.getElementById('sort-criteria').addEventListener('change', applyFilterAndSort);
-document.getElementById('rate').addEventListener('input', applyFilterAndSort);
+// Event listeners
+document.getElementById('filter-category').addEventListener('change', applyFilterSortView);
+document.getElementById('sort-criteria').addEventListener('change', applyFilterSortView);
+document.getElementById('view-style').addEventListener('change', e => {
+  viewStyle = e.target.value;
+  applyFilterSortView();
+});
+document.getElementById('rate').addEventListener('input', applyFilterSortView);
 
-// Order form submission
+// Order form
 document.getElementById('order-form').addEventListener('submit', async e => {
   e.preventDefault();
-  if (Object.keys(cart).length === 0) {
-    alert('Please select at least one product.');
-    return;
-  }
-
+  if (Object.keys(cart).length === 0) { alert('Please select at least one product.'); return; }
   const form = e.target;
   const orderData = {
-    name: form.name.value,
-    email: form.email.value,
-    phone: form.phone.value,
-    deliveryMethod: form.delivery.value,
-    totalCAD: totalCAD.toFixed(2),
-    totalBDT: totalBDT.toFixed(2),
-    totalWeight: totalWeight.toFixed(2),
+    name: form.name.value, email: form.email.value, phone: form.phone.value,
+    deliveryMethod: form.delivery.value, totalCAD: totalCAD.toFixed(2),
+    totalBDT: totalBDT.toFixed(2), totalWeight: totalWeight.toFixed(2),
     orderDetails: JSON.stringify(Object.values(cart), null, 2)
   };
-
   try {
     const res = await fetch('/api/send-order', {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(orderData)
     });
-
     const data = await res.json();
-    if (res.ok) {
-      alert('✅ Order submitted! You will receive confirmation via email.');
-      form.reset();
-      updateTotals();
-    } else {
-      console.error(data);
-      alert('❌ Failed to send order. Please try again.');
-    }
-  } catch (err) {
-    console.error(err);
-    alert('⚠️ Something went wrong. Please try again later.');
-  }
+    if (res.ok) { alert('✅ Order submitted! You will receive confirmation via email.'); form.reset(); updateTotals(); }
+    else { console.error(data); alert('❌ Failed to send order.'); }
+  } catch(err) { console.error(err); alert('⚠️ Something went wrong.'); }
 });
