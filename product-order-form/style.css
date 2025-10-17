@@ -1,0 +1,159 @@
+/* General body styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: #f5f5f5;
+  color: #333;
+}
+
+/* Container for the form and content */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Headings */
+h1, h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Currency exchange rate input */
+.exchange {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.exchange input {
+  width: 80px;
+  padding: 5px;
+  font-size: 16px;
+}
+
+/* Main content layout: products + cart */
+.main-content {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Product list grid */
+.product-list {
+  flex: 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+/* Individual product card */
+.product {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  background: #fafafa;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.product:hover {
+  transform: translateY(-3px);
+}
+
+.product img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.product h3 {
+  margin: 10px 0 5px 0;
+  font-size: 18px;
+}
+
+.product p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.product label input {
+  width: 50px;
+  margin-left: 5px;
+  padding: 3px;
+  text-align: center;
+}
+
+/* Cart panel */
+.cart {
+  flex: 1;
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  background: #fafafa;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.cart h2 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.cart ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+
+.cart li {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* Customer form */
+form#order-form {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+form#order-form input,
+form#order-form select,
+form#order-form button {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+form#order-form button {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+form#order-form button:hover {
+  background-color: #218838;
+}
+
+/* Responsive layout */
+@media (max-width: 800px) {
+  .main-content {
+    flex-direction: column;
+  }
+
+  .cart {
+    max-height: none;
+  }
+}

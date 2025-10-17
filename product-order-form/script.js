@@ -1,6 +1,3 @@
-// Initialize EmailJS
-emailjs.init('YOUR_PUBLIC_KEY'); // Replace with your EmailJS public key
-
 let products = [];
 let cart = {};
 let totalCAD = 0, totalBDT = 0, totalWeight = 0;
@@ -57,7 +54,6 @@ function updateTotals() {
     }
   });
 
-  // Update cart panel
   const cartItems = document.getElementById('cart-items');
   cartItems.innerHTML = '';
   Object.values(cart).forEach(p => {
@@ -71,8 +67,9 @@ function updateTotals() {
   document.getElementById('cart-total-weight').innerText = totalWeight.toFixed(2);
 }
 
+// Handle form submission
 const form = document.getElementById('order-form');
-form.addEventListener('submit', e => {
+form.addEventListener('submit', async e => {
   e.preventDefault();
   if(Object.keys(cart).length === 0){
     alert('Please select at least one product');
@@ -90,13 +87,24 @@ form.addEventListener('submit', e => {
     order_items: JSON.stringify(Object.values(cart), null, 2)
   };
 
-  emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-    .then(response => {
+  try {
+    const res = await fetch('https://fliptodhaka.vercel.app/api/send-order', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ templateParams })
+    });
+
+    const data = await res.json();
+    if (data.success) {
       alert('Order submitted! Confirmation sent via email.');
       form.reset();
       updateTotals();
-    }, error => {
-      console.error('EmailJS error:', error);
+    } else {
+      console.error(data);
       alert('Failed to send order. Please try again later.');
-    });
+    }
+  } catch (err) {
+    console.error(err);
+    alert('Failed to send order. Please try again later.');
+  }
 });
