@@ -3,14 +3,10 @@ let cart = {};
 let totalCAD = 0, totalBDT = 0, totalWeight = 0;
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Fetch CSV file
   const response = await fetch('products.csv');
   const text = await response.text();
-
-  // Parse CSV with PapaParse
   products = Papa.parse(text, { header: true, skipEmptyLines: true }).data;
 
-  // Convert numeric fields from string to numbers
   products.forEach(p => {
     p['Item Price CAD'] = parseFloat(p['Item Price CAD']) || 0;
     p['Item Price BDT'] = parseFloat(p['Item Price BDT']) || 0;
@@ -67,7 +63,6 @@ function updateTotals() {
   document.getElementById('cart-total-weight').innerText = totalWeight.toFixed(2);
 }
 
-// Handle form submission
 const form = document.getElementById('order-form');
 form.addEventListener('submit', async e => {
   e.preventDefault();
@@ -89,9 +84,9 @@ form.addEventListener('submit', async e => {
 
   try {
     const res = await fetch('https://fliptodhaka.vercel.app/api/send-order', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ templateParams })
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ templateParams })
     });
 
     const data = await res.json();
