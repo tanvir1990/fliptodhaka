@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   populateCategoryFilter();
-  renderProducts(products);
+  applyFilterAndSort();
 });
 
 // Populate category filter
@@ -83,19 +83,46 @@ function renderCart() {
   document.getElementById('cart-total-weight').innerText = totalWeight.toFixed(2);
 }
 
-// Apply filters
-document.getElementById('apply-filters').addEventListener('click', () => {
-  const category = document.getElementById('filter-category').value;
-  const maxWeight = parseFloat(document.getElementById('filter-weight').value);
-  const maxPrice = parseFloat(document.getElementById('filter-price').value);
-
+// Apply filter and sort (live)
+function applyFilterAndSort() {
   let filtered = [...products];
+
+  // Filter by category
+  const category = document.getElementById('filter-category').value;
   if (category !== 'all') filtered = filtered.filter(p => p['Item Category'] === category);
-  if (!isNaN(maxWeight)) filtered = filtered.filter(p => p['Item Weight'] <= maxWeight);
-  if (!isNaN(maxPrice)) filtered = filtered.filter(p => p['Item Price CAD'] <= maxPrice);
+
+  // Sort
+  const sort = document.getElementById('sort-criteria').value;
+  switch(sort) {
+    case 'weight-asc':
+      filtered.sort((a,b) => a['Item Weight'] - b['Item Weight']);
+      break;
+    case 'weight-desc':
+      filtered.sort((a,b) => b['Item Weight'] - a['Item Weight']);
+      break;
+    case 'priceCAD-asc':
+      filtered.sort((a,b) => a['Item Price CAD'] - b['Item Price CAD']);
+      break;
+    case 'priceCAD-desc':
+      filtered.sort((a,b) => b['Item Price CAD'] - a['Item Price CAD']);
+      break;
+    case 'priceBDT-asc':
+      filtered.sort((a,b) => (a['Item Price CAD']*getRate()) - (b['Item Price CAD']*getRate()));
+      break;
+    case 'priceBDT-desc':
+      filtered.sort((a,b) => (b['Item Price CAD']*getRate()) - (a['Item Price CAD']*getRate()));
+      break;
+    default:
+      break;
+  }
 
   renderProducts(filtered);
-});
+}
+
+// Event listeners for live filter/sort updates
+document.getElementById('filter-category').addEventListener('change', applyFilterAndSort);
+document.getElementById('sort-criteria').addEventListener('change', applyFilterAndSort);
+document.getElementById('rate').addEventListener('input', applyFilterAndSort);
 
 // Order form submission
 document.getElementById('order-form').addEventListener('submit', async e => {

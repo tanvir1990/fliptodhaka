@@ -21,18 +21,23 @@
       <label>Exchange Rate (1 CAD = <input type="number" id="rate" value="95"> BDT)</label>
     </div>
 
-    <!-- Filters -->
+    <!-- Filters and Sorting -->
     <div class="filters">
-      <label>Category:
+      <label>Filter by Category:
         <select id="filter-category"><option value="all">All</option></select>
       </label>
-      <label>Max Weight (kg):
-        <input type="number" id="filter-weight" placeholder="Any">
+
+      <label>Sort by:
+        <select id="sort-criteria">
+          <option value="none">None</option>
+          <option value="weight-asc">Weight ↑</option>
+          <option value="weight-desc">Weight ↓</option>
+          <option value="priceCAD-asc">Price CAD ↑</option>
+          <option value="priceCAD-desc">Price CAD ↓</option>
+          <option value="priceBDT-asc">Price BDT ↑</option>
+          <option value="priceBDT-desc">Price BDT ↓</option>
+        </select>
       </label>
-      <label>Max Price (CAD):
-        <input type="number" id="filter-price" placeholder="Any">
-      </label>
-      <button id="apply-filters">Apply Filters</button>
     </div>
 
     <!-- Products -->

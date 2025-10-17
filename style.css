@@ -166,3 +166,11 @@ form#order-form button:hover {
     padding: 8px 10px;
   }
 }
+
+/* Filters styling */
+.filters label select {
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-top: 5px;
+}
