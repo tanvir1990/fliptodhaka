@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Product Order Form</title>
+  <title>FlipToDhaka Order Form</title>
   <link rel="stylesheet" href="style.css" />
 
   <!-- CSV parsing library -->
@@ -12,38 +12,37 @@
 </head>
 <body>
   <div class="container">
-    <h1>Product Order Form</h1>
+    <header>
+      <h1>FlipToDhaka Order Form</h1>
+      <div id="cart-summary">
+        🛒 <span id="cart-count">0</span> items | 
+        <span id="cart-total-cad">0</span> CAD / 
+        <span id="cart-total-bdt">0</span> BDT
+      </div>
+    </header>
 
-    <!-- Currency converter -->
+    <!-- Exchange rate -->
     <div class="exchange">
       <label>Exchange Rate (1 CAD = <input type="number" id="rate" value="95"> BDT)</label>
     </div>
 
-    <div class="main-content">
-      <!-- Product list -->
-      <div id="product-list" class="product-list"></div>
-
-      <!-- Cart panel -->
-      <div id="cart" class="cart">
-        <h2>Cart</h2>
-        <ul id="cart-items"></ul>
-        <p>Total: <span id="cart-total-cad">0</span> CAD | <span id="cart-total-bdt">0</span> BDT</p>
-        <p>Total Weight: <span id="cart-total-weight">0</span> kg</p>
-      </div>
+    <!-- Filters -->
+    <div class="filters">
+      <label>Category:
+        <select id="filter-category"><option value="all">All</option></select>
+      </label>
+      <label>Max Weight (kg):
+        <input type="number" id="filter-weight" placeholder="Any">
+      </label>
+      <label>Max Price (CAD):
+        <input type="number" id="filter-price" placeholder="Any">
+      </label>
+      <button id="apply-filters">Apply Filters</button>
     </div>
 
-    <!-- Customer Info -->
-    <form id="order-form">
-      <h2>Customer Details</h2>
-      <input type="text" id="name" placeholder="Full Name" required>
-      <input type="tel" id="phone" placeholder="Phone Number" required>
-      <input type="email" id="email" placeholder="Email" required>
-      <select id="delivery">
-        <option value="pickup">Pickup</option>
-        <option value="hotel">Deliver to Hotel</option>
-      </select>
-      <button type="submit">Submit Order</button>
-    </form>
-  </div>
-</body>
-</html>
+    <!-- Products -->
+    <div id="product-list" class="product-list"></div>
+
+    <!-- Cart panel -->
+    <div id="cart" class="cart">
+      <h2>Cart</h2>
