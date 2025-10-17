@@ -136,7 +136,7 @@ form#order-form button:hover {
   background: #218838;
 }
 
-/* Sticky bottom cart */
+/* Sticky bottom cart summary (2x2 grid) */
 #cart-summary {
   position: fixed;
   bottom: 0;
@@ -144,37 +144,24 @@ form#order-form button:hover {
   right: 0;
   background: #0077cc;
   color: white;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
   padding: 10px 20px;
   font-size: 14px;
   z-index: 1000;
-  flex-wrap: wrap;
-}
-
-#cart-summary div {
-  margin: 5px 10px;
+  gap: 10px;
+  text-align: center;
 }
 
 #cart-summary .cart-label {
   font-weight: bold;
 }
 
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .product-list {
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  }
-}
-
 @media (max-width: 600px) {
   #cart-summary {
-    flex-direction: column;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
     font-size: 12px;
     padding: 8px 10px;
   }
