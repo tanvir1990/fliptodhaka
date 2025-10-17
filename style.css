@@ -1,0 +1,6 @@
+.main-content { display: flex; gap: 20px; }
+.product-list { flex: 2; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+.cart { flex: 1; border: 1px solid #ddd; padding: 10px; border-radius: 8px; background: #fafafa; max-height: 500px; overflow-y: auto; }
+.cart ul { list-style: none; padding: 0; }
+.cart li { margin-bottom: 10px; }
+@media(max-width:800px){ .main-content { flex-direction: column; } }
