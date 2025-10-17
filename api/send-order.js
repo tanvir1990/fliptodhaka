@@ -18,18 +18,16 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   try {
-    // ✅ Parse JSON body
-    const reqBody = await req.json();
-    console.log("Received body:", reqBody); // Debugging
+    // ✅ Correct JSON parsing
+    const reqBody = JSON.parse(req.body);
+    console.log("Received body:", reqBody);
 
     const { name, email, phone, deliveryMethod, orderDetails, totalCAD, totalBDT, totalWeight } = reqBody;
 
-    // Validate required fields
     if (!name || !phone || !orderDetails) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // Read EmailJS credentials from environment variables
     const SERVICE_ID = process.env.EMAILJS_SERVICE_ID;
     const TEMPLATE_ID = process.env.EMAILJS_TEMPLATE_ID;
     const PUBLIC_KEY = process.env.EMAILJS_PUBLIC_KEY;
@@ -39,11 +37,10 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: "EmailJS credentials not configured" });
     }
 
-    // Prepare template parameters
     const templateParams = {
       to_name: "Owner",
       from_name: name,
-      phone: phone,
+      phone,
       delivery_method: deliveryMethod,
       order_details: orderDetails,
       total_cad: totalCAD,
@@ -52,7 +49,6 @@ export default async function handler(req, res) {
       user_email: email,
     };
 
-    // Send email via EmailJS API
     const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -70,7 +66,7 @@ export default async function handler(req, res) {
       throw new Error(errorText);
     }
 
-    return res.status(200).json({ message: "Order sent successfully!" });
+    return res.status(200).json({ success: true });
 
   } catch (err) {
     console.error("Server error:", err);
