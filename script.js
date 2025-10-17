@@ -84,7 +84,7 @@ form.addEventListener('submit', async e => {
 
   try {
     const res = await fetch('https://fliptodhaka.vercel.app/api/send-order', {
-      method: 'POST',
+      method: "POST",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ templateParams })
     });
