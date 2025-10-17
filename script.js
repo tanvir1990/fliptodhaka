@@ -2,6 +2,7 @@ let products = [];
 let cart = {};
 let totalCAD = 0, totalBDT = 0, totalWeight = 0;
 
+// Load products from CSV
 document.addEventListener('DOMContentLoaded', async () => {
   const response = await fetch('products.csv');
   const text = await response.text();
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderProducts();
 });
 
+// Render products on page
 function renderProducts() {
   const list = document.getElementById('product-list');
   list.innerHTML = '';
@@ -33,6 +35,7 @@ function renderProducts() {
   });
 }
 
+// Update totals and cart
 function updateTotals() {
   const rate = parseFloat(document.getElementById('rate').value) || 1;
   totalCAD = 0; totalBDT = 0; totalWeight = 0;
@@ -63,6 +66,7 @@ function updateTotals() {
   document.getElementById('cart-total-weight').innerText = totalWeight.toFixed(2);
 }
 
+// Form submission
 const form = document.getElementById('order-form');
 form.addEventListener('submit', async e => {
   e.preventDefault();
@@ -71,26 +75,27 @@ form.addEventListener('submit', async e => {
     return;
   }
 
-  const templateParams = {
-    customer_name: form.name.value,
-    customer_email: form.email.value,
-    customer_phone: form.phone.value,
-    delivery_method: form.delivery.value,
-    total_cad: totalCAD.toFixed(2),
-    total_bdt: totalBDT.toFixed(2),
-    total_weight: totalWeight.toFixed(2),
-    order_items: JSON.stringify(Object.values(cart), null, 2)
+  // Build payload for send-order.js
+  const orderData = {
+    name: form.name.value,
+    email: form.email.value,
+    phone: form.phone.value,
+    deliveryMethod: form.delivery.value,
+    totalCAD: totalCAD.toFixed(2),
+    totalBDT: totalBDT.toFixed(2),
+    totalWeight: totalWeight.toFixed(2),
+    orderDetails: JSON.stringify(Object.values(cart), null, 2)
   };
 
   try {
     const res = await fetch('https://fliptodhaka.vercel.app/api/send-order', {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ templateParams })
+      body: JSON.stringify(orderData)
     });
 
     const data = await res.json();
-    if (data.success) {
+    if (res.ok) {
       alert('Order submitted! Confirmation sent via email.');
       form.reset();
       updateTotals();
