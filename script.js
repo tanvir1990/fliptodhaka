@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderProducts();
 });
 
-// Render products on page
 function renderProducts() {
   const list = document.getElementById('product-list');
   list.innerHTML = '';
@@ -35,7 +34,6 @@ function renderProducts() {
   });
 }
 
-// Update totals and cart
 function updateTotals() {
   const rate = parseFloat(document.getElementById('rate').value) || 1;
   totalCAD = 0; totalBDT = 0; totalWeight = 0;
@@ -66,16 +64,14 @@ function updateTotals() {
   document.getElementById('cart-total-weight').innerText = totalWeight.toFixed(2);
 }
 
-// Form submission
 const form = document.getElementById('order-form');
 form.addEventListener('submit', async e => {
   e.preventDefault();
-  if(Object.keys(cart).length === 0){
-    alert('Please select at least one product');
+  if (Object.keys(cart).length === 0) {
+    alert('Please select at least one product.');
     return;
   }
 
-  // Build payload for send-order.js
   const orderData = {
     name: form.name.value,
     email: form.email.value,
@@ -88,7 +84,7 @@ form.addEventListener('submit', async e => {
   };
 
   try {
-    const res = await fetch('https://fliptodhaka.vercel.app/api/send-order', {
+    const res = await fetch('/api/send-order', {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(orderData)
@@ -96,15 +92,15 @@ form.addEventListener('submit', async e => {
 
     const data = await res.json();
     if (res.ok) {
-      alert('Order submitted! Confirmation sent via email.');
+      alert('✅ Order submitted! You will receive confirmation via email.');
       form.reset();
       updateTotals();
     } else {
       console.error(data);
-      alert('Failed to send order. Please try again later.');
+      alert('❌ Failed to send order. Please try again.');
     }
   } catch (err) {
     console.error(err);
-    alert('Failed to send order. Please try again later.');
+    alert('⚠️ Something went wrong. Please try again later.');
   }
 });
