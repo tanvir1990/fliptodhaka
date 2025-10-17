@@ -1,4 +1,5 @@
 export default async function handler(req, res) {
+  // CORS preflight
   if (req.method === "OPTIONS") {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -16,7 +17,14 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   try {
-    const reqBody = await req.json();
+    // 🔧 FIX: Manually read body instead of req.json()
+    const buffers = [];
+    for await (const chunk of req) {
+      buffers.push(chunk);
+    }
+    const bodyString = Buffer.concat(buffers).toString();
+    const reqBody = JSON.parse(bodyString);
+
     const { name, email, phone, deliveryMethod, orderDetails, totalCAD, totalBDT, totalWeight } = reqBody;
 
     if (!name || !phone || !orderDetails) {
