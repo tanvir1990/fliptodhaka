@@ -1,9 +1,6 @@
 // api/send-order.js
 
-import fetch from "node-fetch";
-
 export default async function handler(req, res) {
-  // Allow only POST requests
   if (req.method === "OPTIONS") {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -16,7 +13,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
-  // Allow frontend calls
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -33,23 +29,21 @@ export default async function handler(req, res) {
       email,
     } = req.body;
 
-    // Validate input
     if (!name || !phone || !orderDetails) {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
-    // Get EmailJS credentials from environment variables
     const SERVICE_ID = process.env.EMAILJS_SERVICE_ID;
     const TEMPLATE_ID = process.env.EMAILJS_TEMPLATE_ID;
     const PUBLIC_KEY = process.env.EMAILJS_PUBLIC_KEY;
 
     if (!SERVICE_ID || !TEMPLATE_ID || !PUBLIC_KEY) {
+      console.error("Missing EmailJS environment variables.");
       return res.status(500).json({ error: "EmailJS credentials not configured" });
     }
 
-    // Prepare template parameters
     const templateParams = {
-      to_name: "Owner", // recipient name in EmailJS template
+      to_name: "Owner",
       from_name: name,
       phone: phone,
       delivery_method: deliveryMethod,
@@ -60,12 +54,9 @@ export default async function handler(req, res) {
       user_email: email,
     };
 
-    // Send request to EmailJS API
     const response = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         service_id: SERVICE_ID,
         template_id: TEMPLATE_ID,
@@ -77,7 +68,7 @@ export default async function handler(req, res) {
     if (!response.ok) {
       const errorText = await response.text();
       console.error("EmailJS API error:", errorText);
-      throw new Error(`EmailJS request failed: ${errorText}`);
+      throw new Error(errorText);
     }
 
     return res.status(200).json({ message: "Order sent successfully!" });
