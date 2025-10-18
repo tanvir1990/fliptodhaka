@@ -1,6 +1,3 @@
-// Import fetch in CommonJS environment
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-
 module.exports = async function handler(req, res) {
   // --- CORS preflight ---
   if (req.method === "OPTIONS") {
@@ -71,8 +68,8 @@ module.exports = async function handler(req, res) {
     ]);
 
     // --- Parse Brevo responses safely ---
-    let err1 = { status: ownerResp.status, text: await ownerResp.text() };
-    let err2 = { status: customerResp.status, text: await customerResp.text() };
+    const err1 = { status: ownerResp.status, text: await ownerResp.text() };
+    const err2 = { status: customerResp.status, text: await customerResp.text() };
 
     if (!ownerResp.ok || !customerResp.ok) {
       console.error("Brevo errors:", err1, err2);
@@ -82,7 +79,10 @@ module.exports = async function handler(req, res) {
       });
     }
 
-    return res.status(200).json({ message: "✅ Both emails sent successfully!", details: { owner: err1, customer: err2 } });
+    return res.status(200).json({
+      message: "✅ Both emails sent successfully!",
+      details: { owner: err1, customer: err2 }
+    });
 
   } catch (err) {
     console.error("Server error:", err);
