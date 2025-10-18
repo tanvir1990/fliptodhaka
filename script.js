@@ -237,16 +237,29 @@ document.getElementById('order-form').addEventListener('submit', async e=>{
     totalWeight: totalWeight.toFixed(2)
   };
 
-  try {
-    const resp = await fetch('/api/send-order', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
-    const result = await resp.json();
-    alert(result.message);
-  } catch(err) {
-    console.error(err);
-    alert("Failed to send order. Try again.");
+try {
+  const resp = await fetch('/api/send-order', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(payload)
+  });
+
+  const result = await resp.json();
+
+  if (!resp.ok) {
+    // Show Brevo error details if available
+    const errMsg = result.details
+      ? `Server error:\nOwner: ${JSON.stringify(result.details.owner)}\nCustomer: ${JSON.stringify(result.details.customer)}`
+      : result.error || "Unknown server error";
+    alert("Failed to send order.\n" + errMsg);
+    console.error("Order send error:", result);
+    return;
   }
+
+  alert(result.message);
+} catch(err) {
+  console.error(err);
+  alert("Failed to send order. Check console for details.");
+}
+
 });

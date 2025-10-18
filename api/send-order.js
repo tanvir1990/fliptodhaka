@@ -17,13 +17,8 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   try {
-    // --- Read request body manually ---
-    const buffers = [];
-    for await (const chunk of req) buffers.push(chunk);
-    const bodyString = Buffer.concat(buffers).toString();
-    const reqBody = JSON.parse(bodyString);
-
-    const { name, email, phone, deliveryMethod, orderDetails, totalCAD, totalBDT, totalWeight } = reqBody;
+    // --- Use built-in body parsing ---
+    const { name, email, phone, deliveryMethod, orderDetails, totalCAD, totalBDT, totalWeight } = req.body;
 
     if (!name || !phone || !orderDetails) {
       return res.status(400).json({ error: "Missing required fields" });
@@ -47,7 +42,7 @@ export default async function handler(req, res) {
       "content-type": "application/json"
     };
 
-    // --- Send emails using templates (even if templates are empty placeholders for now) ---
+    // --- Send emails using templates ---
     const [ownerResp, customerResp] = await Promise.all([
       fetch("https://api.brevo.com/v3/smtp/email", {
         method: "POST",
@@ -73,17 +68,18 @@ export default async function handler(req, res) {
         : Promise.resolve({ ok: true })
     ]);
 
+    // --- Check responses ---
     if (!ownerResp.ok || !customerResp.ok) {
-      const err1 = await ownerResp.text();
-      const err2 = await customerResp.text();
+      const err1 = await ownerResp.json().catch(() => await ownerResp.text());
+      const err2 = await customerResp.json().catch(() => await customerResp.text());
       console.error("Brevo errors:", err1, err2);
-      throw new Error("Failed to send one or more emails.");
+      return res.status(500).json({ error: "Failed to send one or more emails.", details: { owner: err1, customer: err2 } });
     }
 
     return res.status(200).json({ message: "✅ Both emails sent successfully!" });
 
   } catch (err) {
     console.error("Server error:", err);
-    return res.status(500).json({ error: "Failed to send order." });
+    return res.status(500).json({ error: "Failed to send order.", details: err.message || err });
   }
 }
