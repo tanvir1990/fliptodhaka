@@ -214,3 +214,12 @@ function changeViewStyle() {
   const list = document.getElementById('product-list');
   list.className = 'product-list ' + view;
 }
+
+// --- Cart collapse/expand ---
+const cartSummary = document.getElementById('cart-summary');
+const collapseBtn = document.getElementById('collapse-cart-btn');
+
+collapseBtn.addEventListener('click', () => {
+  cartSummary.classList.toggle('collapsed');
+  collapseBtn.textContent = cartSummary.classList.contains('collapsed') ? '+' : '−';
+});

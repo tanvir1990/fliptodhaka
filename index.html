@@ -10,23 +10,16 @@
 </head>
 <body>
   <div class="container">
-    <!-- Page Title -->
     <h1 class="page-title">Product Order Form</h1>
-
-    <!-- Exchange Rate -->
     <div class="exchange">
       <label>Exchange Rate (1 CAD = <input type="number" id="rate" value="95" min="1"> BDT)</label>
     </div>
 
-    <!-- Filter / Sort / View Controls -->
     <div class="controls-row">
       <div class="controls filter-row">
         <label for="category-filter">Filter by Category:</label>
-        <select id="category-filter">
-          <option value="all">All</option>
-        </select>
+        <select id="category-filter"><option value="all">All</option></select>
       </div>
-
       <div class="controls sort-row">
         <label for="sort-by">Sort by:</label>
         <select id="sort-by">
@@ -39,7 +32,6 @@
           <option value="weight-high">Weight: High to Low</option>
         </select>
       </div>
-
       <div class="controls view-row">
         <label for="view-style">View Style:</label>
         <select id="view-style">
@@ -50,10 +42,8 @@
       </div>
     </div>
 
-    <!-- Product List -->
     <div id="product-list" class="product-list grid"></div>
 
-    <!-- Customer Form -->
     <form id="order-form">
       <h2>Customer Details</h2>
       <input type="text" id="name" placeholder="Full Name" required>
@@ -69,13 +59,19 @@
 
   <!-- Sticky Cart -->
   <div id="cart-summary" class="sticky-cart">
-    <div class="cart-grid">
-      <div>Total Items: <span id="cart-total-items">0</span></div>
-      <div>Total Weight: <span id="cart-total-weight">0</span> kg</div>
-      <div>Total (CAD): <span id="cart-total-cad">0</span></div>
-      <div>Total (BDT): <span id="cart-total-bdt">0</span></div>
+    <div class="cart-header">
+      <span>Cart Summary</span>
+      <button id="collapse-cart-btn">−</button>
     </div>
-    <button id="view-cart-btn">View Cart</button>
+    <div class="cart-content">
+      <div class="cart-grid">
+        <div>Total Items: <span id="cart-total-items">0</span></div>
+        <div>Total Weight: <span id="cart-total-weight">0</span> kg</div>
+        <div>Total (CAD): <span id="cart-total-cad">0</span></div>
+        <div>Total (BDT): <span id="cart-total-bdt">0</span></div>
+      </div>
+      <button id="view-cart-btn">View Cart</button>
+    </div>
   </div>
 
   <!-- Cart Modal -->
