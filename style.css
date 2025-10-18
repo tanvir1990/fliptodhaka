@@ -35,31 +35,29 @@ body {
   margin-left: 4px;
 }
 
-/* --- Controls Section --- */
-.controls {
+/* --- Controls Row --- */
+.controls-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  padding: 0 15px;
+}
+
+/* --- Individual Controls --- */
+.controls {
+  display: flex;
+  gap: 6px;
   align-items: center;
-  padding: 10px 15px;
-  background: #fff;
-  border-bottom: 1px solid #ddd;
-}
-
-.filter-row {
-  justify-content: flex-start;
-}
-
-.sort-view-row {
-  justify-content: flex-start;
-  margin-top: 5px;
+  flex-wrap: wrap;
 }
 
 .controls select {
   padding: 5px 8px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  font-size: 13px;
 }
 
 /* --- Product List --- */
@@ -291,29 +289,13 @@ body {
     grid-template-columns: 1fr auto;
     font-size: 13px;
   }
-}
-/* --- Controls Section --- */
-.controls {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 10px 15px;
-  background: #fff;
-  border-bottom: 1px solid #ddd;
-}
 
-.filter-row {
-  justify-content: flex-start;
-}
+  .controls-row {
+    flex-direction: column;
+    gap: 5px;
+  }
 
-.sort-row {
-  justify-content: flex-start;
-  margin-top: 5px;
-}
-
-.view-row {
-  justify-content: flex-start;
-  margin-top: 5px;
+  .controls {
+    width: 100%;
+  }
 }
