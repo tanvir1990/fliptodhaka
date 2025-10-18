@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FlipToDhaka Order Form</title>
+  <title>Product Order Form</title>
   <link rel="stylesheet" href="style.css" />
 
   <!-- CSV parsing library -->
@@ -12,24 +12,22 @@
 </head>
 <body>
   <div class="container">
-    <header>
-      <h1>FlipToDhaka Order Form</h1>
-    </header>
+    <h1>Product Order Form</h1>
 
-    <!-- Exchange rate -->
+    <!-- Currency converter -->
     <div class="exchange">
       <label>Exchange Rate (1 CAD = <input type="number" id="rate" value="95"> BDT)</label>
     </div>
 
-    <!-- Filters, Sorting, View Style -->
-    <div class="controls">
-      <label>Filter by Category:
-        <select id="filter-category"><option value="all">All</option></select>
+    <!-- Filters & sorting -->
+    <div class="filters">
+      <label>Category:
+        <select id="filter-category">
+          <option value="all">All</option>
+        </select>
       </label>
-
       <label>Sort by:
         <select id="sort-criteria">
-          <option value="default">Default</option>
           <option value="weight-asc">Weight: Low to High</option>
           <option value="weight-desc">Weight: High to Low</option>
           <option value="priceCAD-asc">Price CAD: Low to High</option>
@@ -38,18 +36,46 @@
           <option value="priceBDT-desc">Price BDT: High to Low</option>
         </select>
       </label>
-
-      <label>View Style:
+      <label>View:
         <select id="view-style">
           <option value="thumbnail">Thumbnail</option>
-          <option value="tile">Tile</option>
+          <option value="tiles">Tiles</option>
           <option value="list">List</option>
         </select>
       </label>
     </div>
 
-    <!-- Products -->
-    <div id="product-list" class="product-list thumbnail"></div>
+    <!-- Product list -->
+    <div id="product-list" class="product-list"></div>
+
+    <!-- Sticky bottom cart summary -->
+    <div id="cart-summary">
+      <div class="cart-item">
+        <span class="cart-label">Total Items:</span> <span id="cart-count">0</span>
+      </div>
+      <div class="cart-item">
+        <span class="cart-label">Total Weight:</span> <span id="cart-total-weight">0</span> kg
+      </div>
+      <div class="cart-item">
+        <span class="cart-label">Total CAD:</span> <span id="cart-total-cad">0</span>
+      </div>
+      <div class="cart-item">
+        <span class="cart-label">Total BDT:</span> <span id="cart-total-bdt">0</span>
+      </div>
+      <div class="cart-item" style="grid-column: span 2; text-align:center;">
+        <button id="view-cart-btn">View Cart</button>
+      </div>
+    </div>
+
+    <!-- Cart panel (hidden by default) -->
+    <div id="cart-panel" class="hidden">
+      <h3>Your Cart</h3>
+      <ul id="cart-panel-items"></ul>
+      <p>Total Weight: <span id="panel-total-weight">0</span> kg</p>
+      <p>Total CAD: <span id="panel-total-cad">0</span></p>
+      <p>Total BDT: <span id="panel-total-bdt">0</span></p>
+      <button id="close-cart-btn">Close</button>
+    </div>
 
     <!-- Customer Info -->
     <form id="order-form">
@@ -64,33 +90,5 @@
       <button type="submit">Submit Order</button>
     </form>
   </div>
-
-<!-- Sticky bottom cart summary -->
-<div id="cart-summary">
-  <div class="cart-item">
-    <span class="cart-label">Total Items:</span> <span id="cart-count">0</span>
-  </div>
-  <div class="cart-item">
-    <span class="cart-label">Total Weight:</span> <span id="cart-total-weight">0</span> kg
-  </div>
-  <div class="cart-item">
-    <span class="cart-label">Total CAD:</span> <span id="cart-total-cad">0</span>
-  </div>
-  <div class="cart-item">
-    <span class="cart-label">Total BDT:</span> <span id="cart-total-bdt">0</span>
-  </div>
-  <div class="cart-item" style="grid-column: span 2; text-align:center;">
-    <button id="view-cart-btn">View Cart</button>
-  </div>
-</div>
-
-<!-- Hidden cart panel/modal -->
-<div id="cart-panel" class="hidden">
-  <h3>Your Cart</h3>
-  <ul id="cart-panel-items"></ul>
-  <p>Total Weight: <span id="panel-total-weight">0</span> kg</p>
-  <p>Total CAD: <span id="panel-total-cad">0</span></p>
-  <p>Total BDT: <span id="panel-total-bdt">0</span></p>
-  <button id="close-cart-btn">Close</button>
-</div>
-
+</body>
+</html>
