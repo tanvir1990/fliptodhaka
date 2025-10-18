@@ -63,6 +63,7 @@ function renderProducts(list) {
 function updateTotals() {
   const rate = getRate();
   totalCAD = 0; totalBDT = 0; totalWeight = 0;
+  const previousCart = { ...cart }; // store previous quantities
   cart = {};
 
   document.querySelectorAll('select[data-idx]').forEach(sel => {
@@ -75,10 +76,19 @@ function updateTotals() {
       totalBDT += qty * p['Item Price CAD'] * rate;
       totalWeight += qty * p['Item Weight'];
     }
+
+    // Flash animation if quantity changed
+    const card = sel.closest('.product');
+    if ((previousCart[idx]?.qty || 0) !== qty) {
+      card.classList.remove('product-updated');
+      void card.offsetWidth; // trigger reflow
+      card.classList.add('product-updated');
+    }
   });
 
   renderCart();
 }
+
 
 function renderCart() {
   const countEl = document.getElementById('cart-count');
@@ -86,17 +96,24 @@ function renderCart() {
   const bdtEl = document.getElementById('cart-total-bdt');
   const weightEl = document.getElementById('cart-total-weight');
 
-  [countEl, cadEl, bdtEl, weightEl].forEach(el => {
+  // Animate totals
+  [cadEl, bdtEl, weightEl].forEach(el => {
     el.classList.remove('cart-value-updated');
     void el.offsetWidth;
     el.classList.add('cart-value-updated');
   });
+
+  // Animate total items separately with bounce
+  countEl.classList.remove('cart-count-updated');
+  void countEl.offsetWidth;
+  countEl.classList.add('cart-count-updated');
 
   countEl.innerText = Object.keys(cart).length;
   cadEl.innerText = totalCAD.toFixed(2);
   bdtEl.innerText = totalBDT.toFixed(2);
   weightEl.innerText = totalWeight.toFixed(2);
 }
+
 
 function applyFilterSortView() {
   const cat = document.getElementById('filter-category').value;

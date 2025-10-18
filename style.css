@@ -211,3 +211,30 @@ form#order-form button:hover {
     grid-template-columns: 1fr 1fr;
   }
 }
+/* Badge animation for total items */
+#cart-count {
+  display: inline-block;
+  min-width: 20px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.cart-count-updated {
+  animation: bounce 0.3s ease;
+}
+
+@keyframes bounce {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+/* Flash animation for updated product */
+.product-updated {
+  animation: flash 0.4s ease;
+}
+
+@keyframes flash {
+  0%   { background-color: #ffff99; }
+  50%  { background-color: #fafafa; }
+  100% { background-color: #fafafa; }
+}
