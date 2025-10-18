@@ -221,5 +221,6 @@ const collapseBtn = document.getElementById('collapse-cart-btn');
 
 collapseBtn.addEventListener('click', () => {
   cartSummary.classList.toggle('collapsed');
-  collapseBtn.textContent = cartSummary.classList.contains('collapsed') ? '+' : '−';
+  collapseBtn.textContent = cartSummary.classList.contains('collapsed') ? '▼' : '▲';
 });
+
