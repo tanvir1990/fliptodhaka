@@ -1,4 +1,5 @@
-const fetch = require('node-fetch'); // if your environment doesn't have global fetch
+// Import fetch in CommonJS environment
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 module.exports = async function handler(req, res) {
   // --- CORS preflight ---
@@ -69,12 +70,17 @@ module.exports = async function handler(req, res) {
         : Promise.resolve({ ok: true })
     ]);
 
-    // --- Check responses ---
+    // --- Parse Brevo responses safely ---
+    let err1, err2;
+    try { err1 = await ownerResp.json(); } catch { err1 = await ownerResp.text(); }
+    try { err2 = await customerResp.json(); } catch { err2 = await customerResp.text(); }
+
     if (!ownerResp.ok || !customerResp.ok) {
-      const err1 = await ownerResp.json().catch(() => await ownerResp.text());
-      const err2 = await customerResp.json().catch(() => await customerResp.text());
       console.error("Brevo errors:", err1, err2);
-      return res.status(500).json({ error: "Failed to send one or more emails.", details: { owner: err1, customer: err2 } });
+      return res.status(500).json({
+        error: "Failed to send one or more emails.",
+        details: { owner: err1, customer: err2 }
+      });
     }
 
     return res.status(200).json({ message: "✅ Both emails sent successfully!" });
