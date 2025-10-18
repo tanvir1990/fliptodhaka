@@ -10,20 +10,24 @@
 </head>
 <body>
   <div class="container">
-    <h1>Product Order Form</h1>
+    <!-- Page Title -->
+    <h1 class="page-title">Product Order Form</h1>
 
     <!-- Exchange Rate -->
     <div class="exchange">
-      <label>Exchange Rate (1 CAD = <input type="number" id="rate" value="95"> BDT)</label>
+      <label>Exchange Rate (1 CAD = <input type="number" id="rate" value="95" min="1"> BDT)</label>
     </div>
 
-    <!-- Controls -->
-    <div class="controls">
+    <!-- Filter Row -->
+    <div class="controls filter-row">
       <label for="category-filter">Filter by Category:</label>
       <select id="category-filter">
         <option value="all">All</option>
       </select>
+    </div>
 
+    <!-- Sort/View Row -->
+    <div class="controls sort-view-row">
       <label for="sort-by">Sort by:</label>
       <select id="sort-by">
         <option value="none">None</option>
@@ -62,13 +66,11 @@
 
   <!-- Sticky Cart -->
   <div id="cart-summary" class="sticky-cart">
-    <div>
-      Total Items: <span id="cart-total-items">0</span> |
-      Total Weight: <span id="cart-total-weight">0</span> kg
-    </div>
-    <div>
-      Total (CAD): <span id="cart-total-cad">0</span> |
-      Total (BDT): <span id="cart-total-bdt">0</span>
+    <div class="cart-grid">
+      <div>Total Items: <span id="cart-total-items">0</span></div>
+      <div>Total Weight: <span id="cart-total-weight">0</span> kg</div>
+      <div>Total (CAD): <span id="cart-total-cad">0</span></div>
+      <div>Total (BDT): <span id="cart-total-bdt">0</span></div>
     </div>
     <button id="view-cart-btn">View Cart</button>
   </div>
