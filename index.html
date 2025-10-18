@@ -3,92 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Product Order Form</title>
+  <title>FlipToDhaka Order Form</title>
   <link rel="stylesheet" href="style.css" />
-
-  <!-- CSV parsing library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
   <script src="script.js" defer></script>
 </head>
+
 <body>
   <div class="container">
-    <h1>Product Order Form</h1>
+    <h1>FlipToDhaka Product Order Form</h1>
 
-    <!-- Currency converter -->
+    <!-- Exchange rate -->
     <div class="exchange">
-      <label>Exchange Rate (1 CAD = <input type="number" id="rate" value="95"> BDT)</label>
+      <label>Exchange Rate (1 CAD = 
+        <input type="number" id="rate" value="95" min="1" /> BDT)
+      </label>
     </div>
 
-    <!-- Filters & sorting -->
-    <div class="filters">
-      <label>Category:
-        <select id="filter-category">
-          <option value="all">All</option>
-        </select>
-      </label>
-      <label>Sort by:
-        <select id="sort-criteria">
-          <option value="weight-asc">Weight: Low to High</option>
-          <option value="weight-desc">Weight: High to Low</option>
-          <option value="priceCAD-asc">Price CAD: Low to High</option>
-          <option value="priceCAD-desc">Price CAD: High to Low</option>
-          <option value="priceBDT-asc">Price BDT: Low to High</option>
-          <option value="priceBDT-desc">Price BDT: High to Low</option>
-        </select>
-      </label>
-      <label>View:
-        <select id="view-style">
-          <option value="thumbnail">Thumbnail</option>
-          <option value="tiles">Tiles</option>
-          <option value="list">List</option>
-        </select>
-      </label>
+    <!-- Filter and Sort Controls -->
+    <div class="controls">
+      <label for="filter-category">Filter by Category:</label>
+      <select id="filter-category"></select>
+
+      <label for="sort-option">Sort by:</label>
+      <select id="sort-option">
+        <option value="">Default</option>
+        <option value="priceCADHigh">Price (CAD) – High to Low</option>
+        <option value="priceCADLow">Price (CAD) – Low to High</option>
+        <option value="priceBDTHigh">Price (BDT) – High to Low</option>
+        <option value="priceBDTLow">Price (BDT) – Low to High</option>
+        <option value="weightHigh">Weight – High to Low</option>
+        <option value="weightLow">Weight – Low to High</option>
+      </select>
+
+      <label for="view-option">View:</label>
+      <select id="view-option">
+        <option value="tiles">Tiles</option>
+        <option value="thumbnails">Thumbnails</option>
+        <option value="list">List</option>
+      </select>
     </div>
 
     <!-- Product list -->
-    <div id="product-list" class="product-list"></div>
-
-    <!-- Sticky bottom cart summary -->
-    <div id="cart-summary">
-      <div class="cart-item">
-        <span class="cart-label">Total Items:</span> <span id="cart-count">0</span>
-      </div>
-      <div class="cart-item">
-        <span class="cart-label">Total Weight:</span> <span id="cart-total-weight">0</span> kg
-      </div>
-      <div class="cart-item">
-        <span class="cart-label">Total CAD:</span> <span id="cart-total-cad">0</span>
-      </div>
-      <div class="cart-item">
-        <span class="cart-label">Total BDT:</span> <span id="cart-total-bdt">0</span>
-      </div>
-      <div class="cart-item" style="grid-column: span 2; text-align:center;">
-        <button id="view-cart-btn">View Cart</button>
-      </div>
-    </div>
-
-    <!-- Cart panel (hidden by default) -->
-    <div id="cart-panel" class="hidden">
-      <h3>Your Cart</h3>
-      <ul id="cart-panel-items"></ul>
-      <p>Total Weight: <span id="panel-total-weight">0</span> kg</p>
-      <p>Total CAD: <span id="panel-total-cad">0</span></p>
-      <p>Total BDT: <span id="panel-total-bdt">0</span></p>
-      <button id="close-cart-btn">Close</button>
-    </div>
+    <div id="product-list" class="product-list tiles"></div>
 
     <!-- Customer Info -->
     <form id="order-form">
       <h2>Customer Details</h2>
-      <input type="text" id="name" placeholder="Full Name" required>
-      <input type="tel" id="phone" placeholder="Phone Number" required>
-      <input type="email" id="email" placeholder="Email" required>
+      <input type="text" id="name" placeholder="Full Name" required />
+      <input type="tel" id="phone" placeholder="Phone Number" required />
+      <input type="email" id="email" placeholder="Email" required />
       <select id="delivery">
         <option value="pickup">Pickup</option>
         <option value="hotel">Deliver to Hotel</option>
       </select>
       <button type="submit">Submit Order</button>
     </form>
+  </div>
+
+  <!-- Sticky Cart -->
+  <div id="sticky-cart" class="sticky-cart">
+    <div class="cart-info">
+      <div><strong>Items:</strong> <span id="cart-items-count">0</span></div>
+      <div><strong>Weight:</strong> <span id="cart-total-weight">0</span> kg</div>
+      <div><strong>Total CAD:</strong> <span id="cart-total-cad">0</span></div>
+      <div><strong>Total BDT:</strong> <span id="cart-total-bdt">0</span></div>
+    </div>
+    <button id="view-cart-btn" class="view-cart-btn">🛒 View Cart</button>
+  </div>
+
+  <!-- Cart Modal -->
+  <div id="cart-modal" class="cart-modal">
+    <div class="cart-modal-content">
+      <h2>Your Cart Summary</h2>
+      <div id="cart-modal-items"></div>
+      <div id="cart-modal-totals" class="cart-modal-totals"></div>
+      <button id="close-cart" class="close-cart-btn">Close</button>
+    </div>
   </div>
 </body>
 </html>
