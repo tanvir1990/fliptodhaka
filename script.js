@@ -79,10 +79,22 @@ function updateTotals() {
 }
 
 function renderCart() {
-  document.getElementById('cart-count').innerText = Object.keys(cart).length;
-  document.getElementById('cart-total-cad').innerText = totalCAD.toFixed(2);
-  document.getElementById('cart-total-bdt').innerText = totalBDT.toFixed(2);
-  document.getElementById('cart-total-weight').innerText = totalWeight.toFixed(2);
+  const countEl = document.getElementById('cart-count');
+  const cadEl = document.getElementById('cart-total-cad');
+  const bdtEl = document.getElementById('cart-total-bdt');
+  const weightEl = document.getElementById('cart-total-weight');
+
+  // Animate values
+  [countEl, cadEl, bdtEl, weightEl].forEach(el => {
+    el.classList.remove('cart-value-updated'); // reset
+    void el.offsetWidth; // trigger reflow to restart animation
+    el.classList.add('cart-value-updated');
+  });
+
+  countEl.innerText = Object.keys(cart).length;
+  cadEl.innerText = totalCAD.toFixed(2);
+  bdtEl.innerText = totalBDT.toFixed(2);
+  weightEl.innerText = totalWeight.toFixed(2);
 }
 
 // Filter + Sort + View
