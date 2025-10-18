@@ -63,7 +63,7 @@ function renderProducts(list) {
 function updateTotals() {
   const rate = getRate();
   totalCAD = 0; totalBDT = 0; totalWeight = 0;
-  const previousCart = { ...cart }; // store previous quantities
+  const previousCart = { ...cart };
   cart = {};
   let shouldScrollCart = false;
 
@@ -98,8 +98,6 @@ function updateTotals() {
   }
 }
 
-
-
 function renderCart() {
   const countEl = document.getElementById('cart-count');
   const cadEl = document.getElementById('cart-total-cad');
@@ -124,7 +122,7 @@ function renderCart() {
   weightEl.innerText = totalWeight.toFixed(2);
 }
 
-
+// Filter, sort, view logic
 function applyFilterSortView() {
   const cat = document.getElementById('filter-category').value;
   let list = cat === 'all' ? [...originalProducts] : originalProducts.filter(p => p['Item Category'] === cat);
@@ -142,7 +140,7 @@ function applyFilterSortView() {
   renderProducts(list);
 }
 
-// Event listeners for filter, sort, view style
+// Event listeners
 document.getElementById('filter-category').addEventListener('change', applyFilterSortView);
 document.getElementById('sort-criteria').addEventListener('change', applyFilterSortView);
 document.getElementById('view-style').addEventListener('change', applyFilterSortView);
@@ -190,3 +188,63 @@ form.addEventListener('submit', async e => {
     alert('⚠️ Something went wrong. Please try again later.');
   }
 });
+
+// --------- View Cart panel logic ----------
+const viewCartBtn = document.getElementById('view-cart-btn');
+const cartPanel = document.getElementById('cart-panel');
+const closeCartBtn = document.getElementById('close-cart-btn');
+
+viewCartBtn.addEventListener('click', () => {
+  renderCartPanel();
+  cartPanel.style.display = 'block';
+});
+
+closeCartBtn.addEventListener('click', () => {
+  cartPanel.style.display = 'none';
+});
+
+// Render cart panel
+function renderCartPanel() {
+  const ul = document.getElementById('cart-panel-items');
+  ul.innerHTML = '';
+
+  Object.entries(cart).forEach(([idx, p]) => {
+    const li = document.createElement('li');
+    let options = '';
+    for (let q = 0; q <= 10; q++) {
+      const selected = (p.qty === q) ? 'selected' : '';
+      options += `<option value="${q}" ${selected}>${q}</option>`;
+    }
+
+    li.innerHTML = `
+      <span>${p['Item Name']} = ${(p['Item Price CAD']*p.qty).toFixed(2)} CAD / ${(p['Item Price CAD']*getRate()*p.qty).toFixed(2)} BDT</span>
+      <select data-idx="${idx}" class="cart-panel-qty">${options}</select>
+      <button onclick="deleteFromCart(${idx})">Delete</button>
+    `;
+    ul.appendChild(li);
+  });
+
+  // Attach change event for editable quantities
+  document.querySelectorAll('.cart-panel-qty').forEach(sel => {
+    sel.addEventListener('change', () => {
+      const idx = sel.dataset.idx;
+      const qty = parseInt(sel.value) || 0;
+      const productSelect = document.querySelector(`select[data-idx='${idx}']`);
+      if (productSelect) productSelect.value = qty; // sync main product list
+      updateTotals();
+      renderCartPanel();
+    });
+  });
+
+  document.getElementById('panel-total-weight').innerText = totalWeight.toFixed(2);
+  document.getElementById('panel-total-cad').innerText = totalCAD.toFixed(2);
+  document.getElementById('panel-total-bdt').innerText = totalBDT.toFixed(2);
+}
+
+// Delete item from cart
+function deleteFromCart(idx) {
+  const select = document.querySelector(`select[data-idx='${idx}']`);
+  if (select) select.value = 0;
+  updateTotals();
+  renderCartPanel();
+}

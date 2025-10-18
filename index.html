@@ -65,20 +65,32 @@
     </form>
   </div>
 
-  <!-- Sticky bottom cart summary (2x2 grid) -->
-  <div id="cart-summary">
-    <div class="cart-item">
-      <span class="cart-label">Total Items:</span> <span id="cart-count">0</span>
-    </div>
-    <div class="cart-item">
-      <span class="cart-label">Total Weight:</span> <span id="cart-total-weight">0</span> kg
-    </div>
-    <div class="cart-item">
-      <span class="cart-label">Total CAD:</span> <span id="cart-total-cad">0</span>
-    </div>
-    <div class="cart-item">
-      <span class="cart-label">Total BDT:</span> <span id="cart-total-bdt">0</span>
-    </div>
+<!-- Sticky bottom cart summary -->
+<div id="cart-summary">
+  <div class="cart-item">
+    <span class="cart-label">Total Items:</span> <span id="cart-count">0</span>
   </div>
-</body>
-</html>
+  <div class="cart-item">
+    <span class="cart-label">Total Weight:</span> <span id="cart-total-weight">0</span> kg
+  </div>
+  <div class="cart-item">
+    <span class="cart-label">Total CAD:</span> <span id="cart-total-cad">0</span>
+  </div>
+  <div class="cart-item">
+    <span class="cart-label">Total BDT:</span> <span id="cart-total-bdt">0</span>
+  </div>
+  <div class="cart-item" style="grid-column: span 2; text-align:center;">
+    <button id="view-cart-btn">View Cart</button>
+  </div>
+</div>
+
+<!-- Hidden cart panel/modal -->
+<div id="cart-panel" class="hidden">
+  <h3>Your Cart</h3>
+  <ul id="cart-panel-items"></ul>
+  <p>Total Weight: <span id="panel-total-weight">0</span> kg</p>
+  <p>Total CAD: <span id="panel-total-cad">0</span></p>
+  <p>Total BDT: <span id="panel-total-bdt">0</span></p>
+  <button id="close-cart-btn">Close</button>
+</div>
+
