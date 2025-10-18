@@ -1,4 +1,6 @@
-export default async function handler(req, res) {
+const fetch = require('node-fetch'); // if your environment doesn't have global fetch
+
+module.exports = async function handler(req, res) {
   // --- CORS preflight ---
   if (req.method === "OPTIONS") {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -17,7 +19,6 @@ export default async function handler(req, res) {
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
   try {
-    // --- Use built-in body parsing ---
     const { name, email, phone, deliveryMethod, orderDetails, totalCAD, totalBDT, totalWeight } = req.body;
 
     if (!name || !phone || !orderDetails) {
@@ -82,4 +83,4 @@ export default async function handler(req, res) {
     console.error("Server error:", err);
     return res.status(500).json({ error: "Failed to send order.", details: err.message || err });
   }
-}
+};
