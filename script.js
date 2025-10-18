@@ -4,13 +4,11 @@ let cart = {};
 let totalCAD = 0, totalBDT = 0, totalWeight = 0;
 let viewStyle = 'thumbnail';
 
-// Load products
 document.addEventListener('DOMContentLoaded', async () => {
   const response = await fetch('products.csv');
   const text = await response.text();
   products = Papa.parse(text, { header: true, skipEmptyLines: true }).data;
-
-  originalProducts = [...products]; // keep original order
+  originalProducts = [...products];
 
   products.forEach(p => {
     p['Item Price CAD'] = parseFloat(p['Item Price CAD']) || 0;
@@ -22,7 +20,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   applyFilterSortView();
 });
 
-// Populate category filter
 function populateCategoryFilter() {
   const categories = [...new Set(products.map(p => p['Item Category']))];
   const select = document.getElementById('filter-category');
@@ -34,7 +31,8 @@ function populateCategoryFilter() {
   });
 }
 
-// Render products
+function getRate() { return parseFloat(document.getElementById('rate').value) || 1; }
+
 function renderProducts(list) {
   const container = document.getElementById('product-list');
   container.innerHTML = '';
@@ -43,29 +41,33 @@ function renderProducts(list) {
   list.forEach((p, i) => {
     const div = document.createElement('div');
     div.className = 'product';
+
+    // dropdown for quantity 0-10
+    let options = '';
+    for (let q = 0; q <= 10; q++) {
+      const selected = (cart[i]?.qty === q) ? 'selected' : '';
+      options += `<option value="${q}" ${selected}>${q}</option>`;
+    }
+
     div.innerHTML = `
       <img src="${p['Item Image']}" alt="${p['Item Name']}">
       <h3>${p['Item Name']}</h3>
       <p>${p['Item Category']}</p>
       <p>${p['Item Price CAD'].toFixed(2)} CAD / ${(p['Item Price CAD']*getRate()).toFixed(2)} BDT</p>
-      <label>Qty: <input type="number" min="0" max="20" value="${cart[i]?.qty || 0}" data-idx="${i}" onchange="updateTotals()"></label>
+      <label>Qty: <select data-idx="${i}" onchange="updateTotals()">${options}</select></label>
     `;
     container.appendChild(div);
   });
 }
 
-// Exchange rate
-function getRate() { return parseFloat(document.getElementById('rate').value) || 1; }
-
-// Update totals
 function updateTotals() {
-  totalCAD = totalBDT = totalWeight = 0;
-  cart = {};
   const rate = getRate();
+  totalCAD = 0; totalBDT = 0; totalWeight = 0;
+  cart = {};
 
-  document.querySelectorAll('input[type=number][data-idx]').forEach(input => {
-    const qty = parseInt(input.value) || 0;
-    const idx = input.dataset.idx;
+  document.querySelectorAll('select[data-idx]').forEach(sel => {
+    const qty = parseInt(sel.value) || 0;
+    const idx = sel.dataset.idx;
     if (qty > 0) {
       const p = products[idx];
       cart[idx] = { ...p, qty };
@@ -84,10 +86,9 @@ function renderCart() {
   const bdtEl = document.getElementById('cart-total-bdt');
   const weightEl = document.getElementById('cart-total-weight');
 
-  // Animate values
   [countEl, cadEl, bdtEl, weightEl].forEach(el => {
-    el.classList.remove('cart-value-updated'); // reset
-    void el.offsetWidth; // trigger reflow to restart animation
+    el.classList.remove('cart-value-updated');
+    void el.offsetWidth;
     el.classList.add('cart-value-updated');
   });
 
@@ -97,57 +98,68 @@ function renderCart() {
   weightEl.innerText = totalWeight.toFixed(2);
 }
 
-// Filter + Sort + View
 function applyFilterSortView() {
-  let filtered = [...products];
+  const cat = document.getElementById('filter-category').value;
+  let list = cat === 'all' ? [...originalProducts] : originalProducts.filter(p => p['Item Category'] === cat);
 
-  // Filter
-  const category = document.getElementById('filter-category').value;
-  if (category !== 'all') filtered = filtered.filter(p => p['Item Category'] === category);
-
-  // Sort
   const sort = document.getElementById('sort-criteria').value;
-  switch(sort) {
-    case 'weight-asc': filtered.sort((a,b)=>a['Item Weight']-b['Item Weight']); break;
-    case 'weight-desc': filtered.sort((a,b)=>b['Item Weight']-a['Item Weight']); break;
-    case 'priceCAD-asc': filtered.sort((a,b)=>a['Item Price CAD']-b['Item Price CAD']); break;
-    case 'priceCAD-desc': filtered.sort((a,b)=>b['Item Price CAD']-a['Item Price CAD']); break;
-    case 'priceBDT-asc': filtered.sort((a,b)=>a['Item Price CAD']*getRate()-b['Item Price CAD']*getRate()); break;
-    case 'priceBDT-desc': filtered.sort((a,b)=>b['Item Price CAD']*getRate()-a['Item Price CAD']*getRate()); break;
-    case 'default': filtered = [...originalProducts]; break;
-  }
+  const rate = getRate();
+  if (sort === 'weight-asc') list.sort((a,b)=> a['Item Weight']-b['Item Weight']);
+  if (sort === 'weight-desc') list.sort((a,b)=> b['Item Weight']-a['Item Weight']);
+  if (sort === 'priceCAD-asc') list.sort((a,b)=> a['Item Price CAD']-b['Item Price CAD']);
+  if (sort === 'priceCAD-desc') list.sort((a,b)=> b['Item Price CAD']-a['Item Price CAD']);
+  if (sort === 'priceBDT-asc') list.sort((a,b)=> a['Item Price CAD']*rate - b['Item Price CAD']*rate);
+  if (sort === 'priceBDT-desc') list.sort((a,b)=> b['Item Price CAD']*rate - a['Item Price CAD']*rate);
 
-  renderProducts(filtered);
+  viewStyle = document.getElementById('view-style').value;
+  renderProducts(list);
 }
 
-// Event listeners
+// Event listeners for filter, sort, view style
 document.getElementById('filter-category').addEventListener('change', applyFilterSortView);
 document.getElementById('sort-criteria').addEventListener('change', applyFilterSortView);
-document.getElementById('view-style').addEventListener('change', e => {
-  viewStyle = e.target.value;
-  applyFilterSortView();
-});
-document.getElementById('rate').addEventListener('input', applyFilterSortView);
+document.getElementById('view-style').addEventListener('change', applyFilterSortView);
+document.getElementById('rate').addEventListener('input', updateTotals);
 
-// Order form
-document.getElementById('order-form').addEventListener('submit', async e => {
+// Form submission
+const form = document.getElementById('order-form');
+form.addEventListener('submit', async e => {
   e.preventDefault();
-  if (Object.keys(cart).length === 0) { alert('Please select at least one product.'); return; }
-  const form = e.target;
+  if (Object.keys(cart).length === 0) {
+    alert('Please select at least one product.');
+    return;
+  }
+
   const orderData = {
-    name: form.name.value, email: form.email.value, phone: form.phone.value,
-    deliveryMethod: form.delivery.value, totalCAD: totalCAD.toFixed(2),
-    totalBDT: totalBDT.toFixed(2), totalWeight: totalWeight.toFixed(2),
+    name: form.name.value,
+    email: form.email.value,
+    phone: form.phone.value,
+    deliveryMethod: form.delivery.value,
+    totalCAD: totalCAD.toFixed(2),
+    totalBDT: totalBDT.toFixed(2),
+    totalWeight: totalWeight.toFixed(2),
     orderDetails: JSON.stringify(Object.values(cart), null, 2)
   };
+
   try {
     const res = await fetch('/api/send-order', {
       method: "POST",
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(orderData)
     });
+
     const data = await res.json();
-    if (res.ok) { alert('✅ Order submitted! You will receive confirmation via email.'); form.reset(); updateTotals(); }
-    else { console.error(data); alert('❌ Failed to send order.'); }
-  } catch(err) { console.error(err); alert('⚠️ Something went wrong.'); }
+    if (res.ok) {
+      alert('✅ Order submitted! You will receive confirmation via email.');
+      form.reset();
+      updateTotals();
+      applyFilterSortView();
+    } else {
+      console.error(data);
+      alert('❌ Failed to send order. Please try again.');
+    }
+  } catch (err) {
+    console.error(err);
+    alert('⚠️ Something went wrong. Please try again later.');
+  }
 });
