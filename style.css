@@ -292,3 +292,28 @@ body {
     font-size: 13px;
   }
 }
+/* --- Controls Section --- */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 15px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.filter-row {
+  justify-content: flex-start;
+}
+
+.sort-row {
+  justify-content: flex-start;
+  margin-top: 5px;
+}
+
+.view-row {
+  justify-content: flex-start;
+  margin-top: 5px;
+}
