@@ -65,6 +65,7 @@ function updateTotals() {
   totalCAD = 0; totalBDT = 0; totalWeight = 0;
   const previousCart = { ...cart }; // store previous quantities
   cart = {};
+  let shouldScrollCart = false;
 
   document.querySelectorAll('select[data-idx]').forEach(sel => {
     const qty = parseInt(sel.value) || 0;
@@ -83,11 +84,20 @@ function updateTotals() {
       card.classList.remove('product-updated');
       void card.offsetWidth; // trigger reflow
       card.classList.add('product-updated');
+
+      if (qty > 0) shouldScrollCart = true; // mark for scroll
     }
   });
 
   renderCart();
+
+  // Smooth scroll to cart on mobile
+  if (shouldScrollCart) {
+    const cartSummary = document.getElementById('cart-summary');
+    cartSummary.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }
 }
+
 
 
 function renderCart() {
