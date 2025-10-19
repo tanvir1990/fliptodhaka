@@ -3,23 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product Order Form</title>
+  <title>Product Order Form - FlipToDhaka</title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
+  <!-- Main Script -->
   <script src="script.js" defer></script>
 </head>
 <body>
   <div class="container">
     <h1 class="page-title">Product Order Form</h1>
+
+    <!-- Exchange Rate Input -->
     <div class="exchange">
-      <label>Exchange Rate (1 CAD = <input type="number" id="rate" value="95" min="1"> BDT)</label>
+      <label>
+        Exchange Rate (1 CAD = 
+        <input type="number" id="rate" value="95" min="1"> BDT)
+      </label>
     </div>
 
+    <!-- Controls Row -->
     <div class="controls-row">
+      <!-- Category Filter -->
       <div class="controls filter-row">
         <label for="category-filter">Filter by Category:</label>
-        <select id="category-filter"><option value="all">All</option></select>
+        <select id="category-filter">
+          <option value="all">All</option>
+        </select>
       </div>
+
+      <!-- Sort Controls -->
       <div class="controls sort-row">
         <label for="sort-by">Sort by:</label>
         <select id="sort-by">
@@ -32,6 +49,8 @@
           <option value="weight-high">Weight: High to Low</option>
         </select>
       </div>
+
+      <!-- View Style -->
       <div class="controls view-row">
         <label for="view-style">View Style:</label>
         <select id="view-style">
@@ -42,8 +61,10 @@
       </div>
     </div>
 
+    <!-- Product List Container -->
     <div id="product-list" class="product-list grid"></div>
 
+    <!-- Order Form -->
     <form id="order-form">
       <h2>Customer Details</h2>
       <input type="text" id="name" placeholder="Full Name" required>
@@ -51,9 +72,11 @@
       <input type="email" id="email" placeholder="Email" required>
       <select id="delivery">
         <option value="pickup">Pickup</option>
-        <option value="hotel">Deliver to Hotel</option>
+        <option value="hotel">Deliver to Hotel (6pm to 12am)</option>
       </select>
       <button type="submit">Submit Order</button>
+      <!-- Inline status messages for debugging -->
+      <div id="order-status"></div>
     </form>
   </div>
 
@@ -61,7 +84,7 @@
   <div id="cart-summary" class="sticky-cart">
     <div class="cart-header">
       <span>Cart Summary</span>
-      <button id="collapse-cart-btn">▲</button> <!-- initially expanded -->
+      <button id="collapse-cart-btn">▲</button>
     </div>
     <div class="cart-content">
       <div class="cart-grid">

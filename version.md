@@ -1,62 +1,47 @@
-# FlipToDhaka - Feature & Version Tracker
-
-This document tracks all features of the FlipToDhaka project, their status, and notes per stable version.  
-
----
+# FlipToDhaka - Feature & Version Tracker (Checklist View)
 
 ## 🌟 Stable Development Version 1.12
-
-<details>
-<summary>View Details (click to expand)</summary>
 
 **Lock Date:** 2025-10-19  
 **Status:** Locked / Stable  
 
-### Features
+### ✅ Feature Checklist
 
-| Feature | Description | Status | Notes |
-|---------|-------------|--------|-------|
-| Product Loading | Products loaded from `products.csv` via PapaParse. | ✅ Working | Automatically parses numeric fields. |
-| Product View Styles | Grid / List / Thumbnails selectable via dropdown. | ✅ Working | Layout changes without affecting cart. |
-| Category Filter | Filter products by category from CSV. | ✅ Working | Populated dynamically. |
-| Sorting | Sort by Price (CAD/BDT) and Weight. | ✅ Working | Live sorting, no reload needed. |
-| Exchange Rate Input | User inputs CAD → BDT exchange rate. | ⚠ In Progress | BDT totals update live. |
-| Quantity Selection | Quantity (0–10) selection per product. | ✅ Working | Updates sticky cart and totals. |
-| Sticky Cart | Shows total items, weight, CAD & BDT totals. | ✅ Working | Collapsible, initially expanded. |
-| View Cart Modal | Shows cart items in detail with editable quantity and delete buttons. | ✅ Working | Totals update live. |
-| Cart Modal Close | Close button closes modal. | ✅ Working | Bottom close button. |
-| Cart Collapse/Expand | Sticky cart can collapse/expand. | ✅ Working | Toggle button with ▲/▼ icon. |
-| Order Form | Customer input: name, phone, email, delivery method. | ✅ Working | Required field validation. |
-| Submit Order | Sends order details to `/api/send-order`. | ✅ Working | Sends both owner & customer emails via Brevo. |
-| Email Notifications | Owner & customer receive order emails via Brevo. | ✅ Working | Requires env vars: `BREVO_API_KEY`, `BREVO_SENDER_EMAIL`, `BREVO_RECEIVER_EMAIL`, `BREVO_OWNER_TEMPLATE_ID`, `BREVO_CUSTOMER_TEMPLATE_ID`. |
-| CSV Parsing | Parses numeric values automatically from CSV. | ✅ Working | Skips empty lines. |
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Product Loading from CSV | ✅ Working | Parses numeric fields automatically. |
+| Product View Styles (Grid/List/Thumbnails) | ✅ Working | Changes layout without affecting cart. |
+| Category Filter | ✅ Working | Populated dynamically from CSV. |
+| Sorting (CAD/BDT/Weight) | ✅ Working | Live sorting, no page reload. |
+| Exchange Rate Input (CAD → BDT) | ✅ Working | Updates BDT totals live in sticky cart & modal. |
+| Quantity Selection (0–10 per product) | ✅ Working | Updates sticky cart, modal totals, and product display. |
+| Sticky Cart | ✅ Working | Shows total items, weight, CAD & BDT totals; collapsible. |
+| Cart Collapse/Expand | ✅ Working | Toggle with ▲/▼ icon. |
+| View Cart Modal | ✅ Working | Editable quantity, delete items, live totals update. |
+| Cart Modal Close Button | ✅ Working | Closes modal reliably. |
+| Order Form (Name, Phone, Email, Delivery) | ✅ Working | Required field validation in place. |
+| Submit Order | ✅ Working | Sends order details to `/api/send-order`. |
+| Email Notifications (Owner & Customer) | ✅ Working | Sends emails via Brevo; requires proper env vars. |
+| CSV Parsing & Cleanup | ✅ Working | Skips empty lines, converts numeric fields automatically. |
 
 ### Notes / Known Issues
-- BDT live price updates correctly according to exchange rate.  
-- Cart and modal fully functional with quantity updates.  
-- Emails require proper Brevo env configuration.  
-
-</details>
+- All features in 1.12 are **fully functional**.  
+- Emails require valid Brevo environment variables:  
+  `BREVO_API_KEY`, `BREVO_SENDER_EMAIL`, `BREVO_RECEIVER_EMAIL`, `BREVO_OWNER_TEMPLATE_ID`, `BREVO_CUSTOMER_TEMPLATE_ID`.  
 
 ---
 
-## 📌 Versioning & Future Features
-
-<details>
-<summary>View Version History</summary>
+## 📌 Version History
 
 | Version | Key Changes | Status |
 |---------|------------|--------|
-| 1.12 | Initial stable release with working CSV, cart, view styles, exchange rate, order form, email sending. | ✅ Locked |
-| 1.13 | Planned: Fix BDT prices live update, sticky cart 2x2 grid, better view cart modal. | ⚠ In Progress |
-
-</details>
+| 1.12 | Stable release with working CSV, cart, exchange rate, view styles, quantity selection, order form, email notifications. | ✅ Locked |
+| 1.13 | Planned: Fix BDT live price updates, sticky cart 2x2 grid, improved cart modal UX. | ⚠ In Progress |
 
 ---
 
-## 📝 Recommendations for Tracking
-- Create a new branch for each feature.  
+## 📝 Recommendations
 - Lock each stable version before adding new features.  
-- Update this markdown with feature status (✅ Working, ⚠ In Progress, ❌ Broken).  
-- Test all functionalities locally before deploying.
-
+- Use branches for individual features for safer development.  
+- Update this checklist as you test new features.  
+- Test all functionalities locally before deploying to production.
