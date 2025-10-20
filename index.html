@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Order Form - FlipToDhaka</title>
 
   <!-- Styles -->
@@ -21,7 +21,7 @@
     <!-- Exchange Rate Input -->
     <div class="exchange">
       <label>
-        Exchange Rate (1 CAD = 
+        Exchange Rate (1 CAD =
         <input type="number" id="rate" value="95" min="1"> BDT)
       </label>
     </div>
@@ -64,20 +64,7 @@
     <!-- Product List Container -->
     <div id="product-list" class="product-list grid"></div>
 
-    <!-- Order Form -->
-    <form id="order-form">
-      <h2>Customer Details</h2>
-      <input type="text" id="name" placeholder="Full Name" required>
-      <input type="tel" id="phone" placeholder="Phone Number" required>
-      <input type="email" id="email" placeholder="Email" required>
-      <select id="delivery">
-        <option value="pickup">Pickup</option>
-        <option value="hotel">Deliver to Hotel (6pm to 12am)</option>
-      </select>
-      <button type="submit">Submit Order</button>
-      <!-- Inline status messages for debugging -->
-      <div id="order-status"></div>
-    </form>
+
   </div>
 
   <!-- Sticky Cart -->
@@ -98,18 +85,79 @@
   </div>
 
   <!-- Cart Modal -->
-  <div id="cart-modal" class="cart-modal">
+  <div id="cart-modal" class="cart-modal" aria-hidden="true" role="dialog">
     <div class="modal-content">
       <h2>Your Cart</h2>
       <div id="cart-modal-items"></div>
+
       <div class="cart-modal-totals">
         <p>Total Items: <span id="modal-total-items">0</span></p>
         <p>Total Weight: <span id="modal-total-weight">0</span> kg</p>
         <p>Total (CAD): <span id="modal-total-cad">0</span></p>
         <p>Total (BDT): <span id="modal-total-bdt">0</span></p>
       </div>
-      <button id="close-cart-btn">Close</button>
+
+      <div class="modal-actions">
+        <button id="close-cart-btn">Close</button>
+        <!-- NEW: Proceed to Review / Order Confirmation -->
+        <button id="proceed-order-btn">Proceed to Order Confirmation</button>
+      </div>
     </div>
   </div>
+
+  <!-- REVIEW ORDER Modal (contains the moved order form) -->
+  <div id="review-modal" class="cart-modal" aria-hidden="true" role="dialog">
+    <div class="modal-content">
+      <h2>Review Order</h2>
+
+      <!-- Order summary (read-only view of cart items & totals) -->
+      <div id="review-order-summary">
+        <div id="review-items"></div>
+        <div class="review-totals">
+          <p>Total Items: <span id="review-total-items">0</span></p>
+          <p>Total Weight: <span id="review-total-weight">0</span> kg</p>
+          <p>Total (CAD): <span id="review-total-cad">0</span></p>
+          <p>Total (BDT): <span id="review-total-bdt">0</span></p>
+        </div>
+      </div>
+
+      <hr/>
+
+      <!-- Moved Order Form: user completes details here -->
+      <form id="review-order-form">
+        <h3>Customer Details</h3>
+        <label for="review-name">Full Name:</label>
+        <input type="text" id="review-name" name="name" required>
+
+        <label for="review-phone">Phone <small>(BD or CDN)</small>:</label>
+        <input type="text" id="review-phone" name="phone" required>
+
+        <label for="review-email">Email Address:</label>
+        <input type="email" id="review-email" name="email" required>
+
+        <label for="review-delivery">Delivery Option:</label>
+        <select id="review-delivery" name="delivery" required>
+          <option value="Delivery To Hotel">Delivery To Hotel</option>
+          <option value="pickup">Pickup</option>
+        </select>
+
+        <label for="review-delivery-date">Delivery Date:</label>
+        <input type="date" id="review-delivery-date" name="delivery-date" required>
+
+        <label for="review-delivery-time">Delivery Time:</label>
+        <input type="time" id="review-delivery-time" name="delivery-time" required>
+        <small style="display:block;color:#555;font-size:12px;margin-bottom:8px;">
+          Delivery available between 6pm-12am. Meet at Hotel Lobby.
+        </small>
+
+        <div class="modal-actions">
+          <button type="button" id="back-to-cart-btn">Back to Cart</button>
+          <button type="submit" id="confirm-order-btn">Proceed to Order Confirmation</button>
+        </div>
+        <div id="review-order-status" style="margin-top:8px;font-size:13px;"></div>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>
