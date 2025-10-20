@@ -1,4 +1,4 @@
-// --- version log: Reverte to Development Stable Version 1.12 ---
+// --- version log: Reverte to Development Stable Version 1.12 with live BDT update ---
 
 let products = [];
 let cart = {};
@@ -41,6 +41,10 @@ function populateCategoryFilter(){
 function renderProducts(){
   const list = document.getElementById('product-list');
   list.innerHTML = '';
+  const rate = parseFloat(document.getElementById('rate').value) || 1;
+  const selectedQuantities = {};
+  Object.entries(cart).forEach(([idx,p]) => selectedQuantities[idx] = p.qty);
+
   products.forEach((p,i)=>{
     const div = document.createElement('div');
     div.className='product';
@@ -49,22 +53,24 @@ function renderProducts(){
       <img src="${p['Item Image']}" alt="${p['Item Name']}">
       <h3>${p['Item Name']}</h3>
       <p>${p['Item Category']}</p>
-      <p>${p['Item Price CAD']} CAD / ${p['Item Price BDT']} BDT</p>
+      <p>${p['Item Price CAD']} CAD / ${(p['Item Price CAD']*rate).toFixed(2)} BDT</p>
       <label>Qty: 
         <select data-idx="${i}">
-          ${[...Array(11).keys()].map(q=>`<option value="${q}">${q}</option>`).join('')}
+          ${[...Array(11).keys()].map(q=>`<option value="${q}" ${q===selectedQuantities[i]?'selected':''}>${q}</option>`).join('')}
         </select>
       </label>
     `;
     list.appendChild(div);
   });
+
   document.querySelectorAll('.product select').forEach(sel=>sel.addEventListener('change', updateTotals));
 }
 
 // --- Update totals ---
 function updateTotals(){
-  const rate = parseFloat(document.getElementById('rate').value)||1;
+  const rate = parseFloat(document.getElementById('rate').value) || 1;
   totalCAD=0; totalBDT=0; totalWeight=0; cart={};
+
   document.querySelectorAll('.product select').forEach(sel=>{
     const qty=parseInt(sel.value)||0;
     const idx=sel.dataset.idx;
@@ -76,10 +82,12 @@ function updateTotals(){
       totalWeight += qty*p['Item Weight'];
     }
   });
+
   document.getElementById('cart-total-items').innerText=Object.values(cart).reduce((a,p)=>a+p.qty,0);
   document.getElementById('cart-total-cad').innerText=totalCAD.toFixed(2);
   document.getElementById('cart-total-bdt').innerText=totalBDT.toFixed(2);
   document.getElementById('cart-total-weight').innerText=totalWeight.toFixed(2);
+
   renderCartModal();
   console.log("🛒 Cart updated:", cart, { totalCAD, totalBDT, totalWeight });
 }
@@ -89,6 +97,7 @@ function renderCartModal(){
   const container=document.getElementById('cart-modal-items');
   container.innerHTML='';
   const rate=parseFloat(document.getElementById('rate').value)||1;
+
   Object.entries(cart).forEach(([idx,p])=>{
     const div=document.createElement('div');
     div.className='cart-item';
@@ -103,6 +112,7 @@ function renderCartModal(){
     `;
     container.appendChild(div);
   });
+
   document.getElementById('modal-total-items').innerText=Object.values(cart).reduce((a,p)=>a+p.qty,0);
   document.getElementById('modal-total-cad').innerText=totalCAD.toFixed(2);
   document.getElementById('modal-total-bdt').innerText=totalBDT.toFixed(2);
@@ -171,7 +181,7 @@ function filterProducts(){
       <img src="${p['Item Image']}" alt="${p['Item Name']}">
       <h3>${p['Item Name']}</h3>
       <p>${p['Item Category']}</p>
-      <p>${p['Item Price CAD']} CAD / ${p['Item Price BDT']} BDT</p>
+      <p>${p['Item Price CAD']} CAD / ${(p['Item Price CAD']*rate).toFixed(2)} BDT</p>
       <label>Qty: 
         <select data-idx="${idx}">
           ${[...Array(11).keys()].map(q=>`<option value="${q}" ${q===selectedQuantities[idx]?'selected':''}>${q}</option>`).join('')}
@@ -207,7 +217,7 @@ document.getElementById('order-form').addEventListener('submit', async e=>{
   const email=document.getElementById('email').value.trim();
   const deliveryMethod=document.getElementById('delivery').value;
 
-  const orderDetails=Object.values(cart).map((p,i)=>`${i+1}. ${p['Item Name']} — Qty: ${p.qty} — ${p['Item Price CAD']} CAD — ${p['Item Price BDT']} BDT`).join("\n");
+  const orderDetails=Object.values(cart).map((p,i)=>`${i+1}. ${p['Item Name']} — Qty: ${p.qty} — ${p['Item Price CAD']} CAD — ${(p['Item Price CAD']*parseFloat(document.getElementById('rate').value)).toFixed(2)} BDT`).join("\n");
 
   const payload={ name, phone, email, deliveryMethod, orderDetails, totalCAD: totalCAD.toFixed(2), totalBDT: totalBDT.toFixed(2), totalWeight: totalWeight.toFixed(2) };
   console.log("📝 Sending order:", payload);
@@ -230,4 +240,10 @@ document.getElementById('order-form').addEventListener('submit', async e=>{
     console.error("💥 Error sending order:", err);
     alert("Failed to send order. Check console for details.");
   }
+});
+
+// --- Live exchange rate update ---
+document.getElementById('rate').addEventListener('input', ()=>{
+  renderProducts(); // update product BDT prices live
+  updateTotals();   // update cart totals live
 });
