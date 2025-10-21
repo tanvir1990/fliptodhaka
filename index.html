@@ -55,15 +55,14 @@
         <label for="view-style">View Style:</label>
         <select id="view-style">
           <option value="grid">Tiles</option>
-          <option value="thumbnails">Thumbnails</option>
+          <option value="thumbnails" selected>Thumbnails</option>
           <option value="list">List</option>
         </select>
       </div>
     </div>
 
     <!-- Product List Container -->
-    <div id="product-list" class="product-list grid"></div>
-
+    <div id="product-list" class="product-list thumbnails"></div>
 
   </div>
 
@@ -99,18 +98,17 @@
 
       <div class="modal-actions">
         <button id="close-cart-btn">Close</button>
-        <!-- NEW: Proceed to Review / Order Confirmation -->
         <button id="proceed-order-btn">Proceed to Order Confirmation</button>
       </div>
     </div>
   </div>
 
-  <!-- REVIEW ORDER Modal (contains the moved order form) -->
+  <!-- REVIEW ORDER Modal -->
   <div id="review-modal" class="cart-modal" aria-hidden="true" role="dialog">
     <div class="modal-content">
       <h2>Review Order</h2>
 
-      <!-- Order summary (read-only view of cart items & totals) -->
+      <!-- Order summary -->
       <div id="review-order-summary">
         <div id="review-items"></div>
         <div class="review-totals">
@@ -123,7 +121,7 @@
 
       <hr/>
 
-      <!-- Moved Order Form: user completes details here -->
+      <!-- Order Form -->
       <form id="review-order-form">
         <h3>Customer Details</h3>
         <label for="review-name">Full Name:</label>

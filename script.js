@@ -16,6 +16,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       p['Item Weight'] = parseFloat(p['Item Weight']) || 0;
     });
     populateCategoryFilter();
+    
+    // ✅ Set default view to thumbnails
+    document.getElementById('view-style').value = 'thumbnails';
+    
     renderProducts();
     updateTotals();
   } catch(err) {
