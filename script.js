@@ -1,5 +1,3 @@
-// --- version log: v1.12 + Review Order Modal + polished modal layout ---
-
 let products = [];
 let cart = {};
 let totalCAD = 0, totalBDT = 0, totalWeight = 0;
@@ -16,12 +14,19 @@ document.addEventListener('DOMContentLoaded', async () => {
       p['Item Weight'] = parseFloat(p['Item Weight']) || 0;
     });
     populateCategoryFilter();
-    
+
     // ✅ Set default view to thumbnails
     document.getElementById('view-style').value = 'thumbnails';
-    
+
     renderProducts();
     updateTotals();
+
+    // --- Initialize sticky cart as expanded with downward triangle ---
+    const collapseBtn = document.getElementById('collapse-cart-btn');
+    const cartSummary = document.getElementById('cart-summary');
+    cartSummary.classList.remove('collapsed');
+    collapseBtn.textContent = '▼';
+    cartSummary.style.maxHeight = cartSummary.scrollHeight + 'px';
   } catch(err) {
     console.error("❌ Failed to load products:", err);
     alert("Failed to load products. Check console for details.");
@@ -265,12 +270,26 @@ function changeViewStyle(){
   list.className='product-list '+view;
 }
 
-// --- Cart collapse/expand ---
+// --- Sticky Cart collapse/expand with auto height & single triangle ---
 const cartSummary=document.getElementById('cart-summary');
 const collapseBtn=document.getElementById('collapse-cart-btn');
+
 collapseBtn.addEventListener('click', ()=>{
-  cartSummary.classList.toggle('collapsed');
-  collapseBtn.textContent=cartSummary.classList.contains('collapsed')?'▲':'▼';
+  const isCollapsed = cartSummary.classList.toggle('collapsed');
+  collapseBtn.textContent = isCollapsed ? '▲' : '▼';
+
+  if(isCollapsed){
+    cartSummary.style.maxHeight = '40px';
+  } else {
+    cartSummary.style.maxHeight = cartSummary.scrollHeight + 'px';
+  }
+});
+
+// --- Adjust sticky cart height on window resize ---
+window.addEventListener('resize', () => {
+  if(!cartSummary.classList.contains('collapsed')){
+    cartSummary.style.maxHeight = cartSummary.scrollHeight + 'px';
+  }
 });
 
 // --- Live exchange rate update ---

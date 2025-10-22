@@ -1,18 +1,21 @@
-# 🧾 FlipToDhaka — Version 1.13.1 (Stable Development Lock)
+# 🧾 FlipToDhaka — Version 1.14 (Stable Development Lock)
 
 **Release Type:** Stable  
-**Version:** 1.13.1  
+**Version:** 1.14  
 **Deployment:** Vercel  
 
 ---
 
 ## 🧩 Overview
 Stable release consolidating all verified modules from previous builds.  
-Includes the finalized **Review Order Modal**, working **email delivery**, fully tested **cart logic**, and **UI/UX improvements** for mobile and product display.
+Includes **fully functioning sticky cart with proper collapse/expand triangle**, **cart modal syncing**, **review order flow**, and **email integration**.  
+Minor bug fixes and UI refinements applied to enhance user experience.
 
-**Key Updates from v1.13:**
-- Sticky cart repositioned to bottom of the screen on mobile devices (Android / iOS browsers) while preserving collapse/expand and live totals.
-- Product list default view set to **thumbnail grid** on page load. Other view toggles (grid/list) remain functional.
+**Key Updates from v1.13.1:**
+- Fixed sticky cart collapse/expand button to correctly toggle triangle between ▼ and ▲.
+- Cart height adjusts dynamically on window resize when expanded.
+- Quantity selectors in product list and cart modal remain fully synchronized.
+- Minor front-end CSS adjustments for consistent spacing and alignment.
 
 ---
 
@@ -20,11 +23,11 @@ Includes the finalized **Review Order Modal**, working **email delivery**, fully
 | Feature | Description | Status |
 |:--------|:-------------|:------:|
 | Responsive Layout | Adaptive container, grid support | ✅ |
-| Product Display | **Default thumbnails view**, Grid / List toggle | ✅ |
+| Product Display | Default **thumbnails view**, Grid / List toggle | ✅ |
 | Exchange Rate Input | CAD → BDT conversion with live updates | ✅ |
 | Category Filter | Dynamically populated from CSV data | ✅ |
 | Sorting Options | Sort by price (CAD/BDT) and weight | ✅ |
-| View Style Toggle | Switch between grid and list layouts | ✅ |
+| View Style Toggle | Switch between grid, list, or thumbnail layouts | ✅ |
 
 ---
 
@@ -32,12 +35,13 @@ Includes the finalized **Review Order Modal**, working **email delivery**, fully
 | Feature | Description | Status |
 |:--------|:-------------|:------:|
 | Live Cart Summary | Displays totals + weight in real time | ✅ |
-| Collapse / Expand Cart | Smooth visibility toggle | ✅ |
-| **Mobile Sticky Cart** | Fixed at bottom on mobile; desktop stays top-right | ✅ |
+| Collapse / Expand Cart | Smooth visibility toggle with proper triangle ▲/▼ | ✅ |
+| Mobile Sticky Cart | Fixed at bottom on mobile; desktop stays top-right | ✅ |
 | Add / Remove Products | Real-time updates with quantity control | ✅ |
 | Cart Modal | Shows selected items + editable quantities | ✅ |
 | Sync with Product List | Cart and product selectors stay in sync | ✅ |
 | Auto Totals | Live recalculation of CAD, BDT, and weight | ✅ |
+| Dynamic Height | Sticky cart expands/collapses based on content & window size | ✅ |
 
 ---
 

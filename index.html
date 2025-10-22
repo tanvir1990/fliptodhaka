@@ -55,7 +55,7 @@
         <label for="view-style">View Style:</label>
         <select id="view-style">
           <option value="grid">Tiles</option>
-          <option value="thumbnails" selected>Thumbnails</option>
+          <option value="thumbnails">Thumbnails</option>
           <option value="list">List</option>
         </select>
       </div>
@@ -63,14 +63,13 @@
 
     <!-- Product List Container -->
     <div id="product-list" class="product-list thumbnails"></div>
-
   </div>
 
-  <!-- Sticky Cart -->
+  <!-- Sticky Cart (bottom of screen for mobile) -->
   <div id="cart-summary" class="sticky-cart">
     <div class="cart-header">
       <span>Cart Summary</span>
-      <button id="collapse-cart-btn">▲</button>
+      <button id="collapse-cart-btn">▼</button>
     </div>
     <div class="cart-content">
       <div class="cart-grid">
@@ -108,7 +107,6 @@
     <div class="modal-content">
       <h2>Review Order</h2>
 
-      <!-- Order summary -->
       <div id="review-order-summary">
         <div id="review-items"></div>
         <div class="review-totals">
@@ -121,7 +119,6 @@
 
       <hr/>
 
-      <!-- Order Form -->
       <form id="review-order-form">
         <h3>Customer Details</h3>
         <label for="review-name">Full Name:</label>
