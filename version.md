@@ -1,23 +1,24 @@
-# 🧾 FlipToDhaka — Version 1.14 (Stable Development Lock)
+# 🧾 FlipToDhaka — Version 1.15 (Stable Development Lock)
 
 **Release Type:** Stable  
-**Version:** 1.14  
+**Version:** 1.15  
 **Deployment:** Vercel  
 
-**Development:** In Progress
-**Dev Version:** 1.15  
+**Development:** In Progress  
+**Dev Version:** 1.16  
 ---
 
 ## 🧩 Overview
-Stable release consolidating all verified modules from previous builds.  
-Includes **fully functioning sticky cart with proper collapse/expand triangle**, **cart modal syncing**, **review order flow**, and **email integration**.  
-Minor bug fixes and UI refinements applied to enhance user experience.
+Stable release building upon Version 1.14 with a **new refresh confirmation safeguard** to prevent accidental data loss.  
+Includes all previously verified modules: **sticky cart**, **cart modal syncing**, **review order flow**, and **email integration**.  
+This version enhances user experience by ensuring cart and form data aren’t lost unintentionally during page reloads.
 
-**Key Updates from v1.13.1:**
-- Fixed sticky cart collapse/expand button to correctly toggle triangle between ▼ and ▲.
-- Cart height adjusts dynamically on window resize when expanded.
-- Quantity selectors in product list and cart modal remain fully synchronized.
-- Minor front-end CSS adjustments for consistent spacing and alignment.
+**Key Updates from v1.14:**
+- Added **refresh confirmation prompt** when user attempts to reload the page with existing cart or review data.  
+- User receives alert: *“Refreshing the page will Clear the Cart and all information. Would you like to continue?”*  
+- Selecting **Yes** refreshes and clears everything; selecting **No** cancels the reload.  
+- Implementation uses native browser confirmation (no layout or style changes).  
+- No other functions or visuals modified.
 
 ---
 
@@ -30,6 +31,7 @@ Minor bug fixes and UI refinements applied to enhance user experience.
 | Category Filter | Dynamically populated from CSV data | ✅ |
 | Sorting Options | Sort by price (CAD/BDT) and weight | ✅ |
 | View Style Toggle | Switch between grid, list, or thumbnail layouts | ✅ |
+| **Refresh Confirmation** | Prevents accidental data loss on reload | ✅ |
 
 ---
 
@@ -44,6 +46,7 @@ Minor bug fixes and UI refinements applied to enhance user experience.
 | Sync with Product List | Cart and product selectors stay in sync | ✅ |
 | Auto Totals | Live recalculation of CAD, BDT, and weight | ✅ |
 | Dynamic Height | Sticky cart expands/collapses based on content & window size | ✅ |
+| **Reload Protection** | Prompts before page refresh when cart is not empty | ✅ |
 
 ---
 
@@ -55,6 +58,7 @@ Minor bug fixes and UI refinements applied to enhance user experience.
 | Navigation Flow | Seamless Back ↔ Next navigation | ✅ |
 | Validation | Prevents empty or invalid orders | ✅ |
 | Status Feedback | Inline success/error messages | ✅ |
+| **Data Loss Warning** | Warns before refresh if form contains info | ✅ |
 
 ---
 
