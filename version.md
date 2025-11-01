@@ -4,6 +4,8 @@
 **Version:** 1.14  
 **Deployment:** Vercel  
 
+**Development:** In Progress
+**Dev Version:** 1.15  
 ---
 
 ## 🧩 Overview
