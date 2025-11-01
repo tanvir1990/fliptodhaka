@@ -206,18 +206,50 @@ document.getElementById('review-order-form').addEventListener('submit', async e 
   const payload = { name, phone, email, deliveryMethod, orderDetails, totalCAD: totalCAD.toFixed(2), totalBDT: totalBDT.toFixed(2), totalWeight: totalWeight.toFixed(2) };
 
   try {
-    const resp = await fetch('/api/send-order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    // 🟡 NEW: Show "Please wait" notice
+    const loadingMsg = document.createElement('div');
+    loadingMsg.id = 'loading-message';
+    loadingMsg.textContent = "⏳ Please wait while we confirm your order...";
+    loadingMsg.style.position = 'fixed';
+    loadingMsg.style.top = '20px';
+    loadingMsg.style.left = '50%';
+    loadingMsg.style.transform = 'translateX(-50%)';
+    loadingMsg.style.background = '#fff8dc';
+    loadingMsg.style.padding = '10px 20px';
+    loadingMsg.style.border = '1px solid #ccc';
+    loadingMsg.style.borderRadius = '8px';
+    loadingMsg.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+    loadingMsg.style.zIndex = '9999';
+    document.body.appendChild(loadingMsg);
+
+    const resp = await fetch('/api/send-order', { 
+      method: 'POST', 
+      headers: { 'Content-Type': 'application/json' }, 
+      body: JSON.stringify(payload) 
+    });
     const text = await resp.text();
     let result;
     try { result = JSON.parse(text); } catch (e) { result = { error: text }; }
 
-    if (!resp.ok) { alert("Failed to send order. Check console."); console.error(result); return; }
+    // 🟢 Remove loading message once response received
+    document.body.removeChild(loadingMsg);
 
-    alert(result.message || "Order sent successfully!");
+    if (!resp.ok) { 
+      alert("Failed to send order. Check console."); 
+      console.error(result); 
+      return; 
+    }
+
+    alert(result.message || "✅ Both emails sent successfully!");
     document.getElementById('review-modal').style.display = 'none';
     cart = {}; totalCAD = 0; totalBDT = 0; totalWeight = 0;
     renderProducts(); updateTotals();
-  } catch (err) { alert("Failed to send order. Check console."); console.error(err); }
+
+  } catch (err) { 
+    document.getElementById('loading-message')?.remove();
+    alert("Failed to send order. Check console."); 
+    console.error(err); 
+  }
 });
 
 // --- Filter, sort & view ---
@@ -256,9 +288,7 @@ function filterProducts() {
       <p>${p['Item Category']}</p>
       <p>${p['Item Price CAD']} CAD / ${(p['Item Price CAD'] * rate).toFixed(2)} BDT</p>
       <label>Qty:
-        <select data-idx="${idx}">
-          ${[...Array(11).keys()].map(q => `<option value="${q}" ${q === selectedQuantities[idx] ? 'selected' : ''}>${q}</option>`).join('')}
-        </select>
+        <select data-idx="${idx}">${[...Array(11).keys()].map(q => `<option value="${q}" ${q === selectedQuantities[idx] ? 'selected' : ''}>${q}</option>`).join('')}</select>
       </label>
     `;
     list.appendChild(div);
@@ -294,7 +324,6 @@ document.getElementById('rate').addEventListener('input', () => {
   renderProducts();
   updateTotals();
 });
-
 
 // ========================================================
 // 🧠 NEW FEATURE: Refresh confirmation (v1.15 enhancement)
