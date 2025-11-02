@@ -20,12 +20,40 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderProducts();
     updateTotals();
 
-    // --- Initialize sticky cart as expanded with downward triangle ---
+    // --- Initialize sticky cart as expanded ---
     const collapseBtn = document.getElementById('collapse-cart-btn');
     const cartSummary = document.getElementById('cart-summary');
     cartSummary.classList.remove('collapsed');
     collapseBtn.textContent = '▼';
     cartSummary.style.maxHeight = cartSummary.scrollHeight + 'px';
+
+    // --- Delivery Date Picker with restrictions ---
+    const deliveryInput = document.getElementById('review-delivery-date');
+    if (deliveryInput) {
+      const today = new Date();
+      const maxDate = new Date(today.getFullYear(), today.getMonth() + 2, today.getDate()); // 2 months ahead
+
+      flatpickr(deliveryInput, {
+        dateFormat: "Y-m-d",
+        minDate: today,
+        maxDate: maxDate,
+        disable: [
+          function(date) {
+            // Allow only Tue (2), Thu (4), Sat (6)
+            return ![2, 4, 6].includes(date.getDay());
+          }
+        ],
+        onReady: function(selectedDates, dateStr, instance) {
+          // Add tooltip text above calendar
+          const info = document.createElement('div');
+          info.style.fontSize = '12px';
+          info.style.color = '#555';
+          info.style.marginBottom = '4px';
+          info.textContent = 'Delivery available only on Tuesday, Thursday, Saturday, up to 2 months in advance';
+          instance.calendarContainer.prepend(info);
+        }
+      });
+    }
   } catch (err) {
     console.error("❌ Failed to load products:", err);
     alert("Failed to load products. Check console for details.");
@@ -99,7 +127,7 @@ function updateTotals() {
   renderCartModal();
 }
 
-// --- Render Cart Modal with headers ---
+// --- Render Cart Modal ---
 function renderCartModal() {
   const container = document.getElementById('cart-modal-items');
   container.innerHTML = '';
@@ -128,115 +156,111 @@ function renderCartModal() {
     container.appendChild(div);
   });
 
-  // Update modal totals
-  document.getElementById('modal-total-items').innerText = Object.values(cart).reduce((a, p) => a + p.qty, 0);
-  document.getElementById('modal-total-cad').innerText = totalCAD.toFixed(2);
-  document.getElementById('modal-total-bdt').innerText = totalBDT.toFixed(2);
-  document.getElementById('modal-total-weight').innerText = totalWeight.toFixed(2);
+  // --- Update Cart Modal Totals (2x2 grid) ---
+  const modalTotals = document.querySelector('#cart-modal .cart-modal-totals-grid');
+  if (modalTotals) modalTotals.innerHTML = `
+    <div><strong>Total Items:</strong> ${Object.values(cart).reduce((a,p)=>a+p.qty,0)}</div>
+    <div><strong>Total Weight:</strong> ${totalWeight.toFixed(2)} kg</div>
+    <div><strong>Total (CAD):</strong> ${totalCAD.toFixed(2)}</div>
+    <div><strong>Total (BDT):</strong> ${totalBDT.toFixed(2)}</div>
+  `;
 
   // Event listeners for quantity change
-  container.querySelectorAll('select').forEach(sel => {
-    sel.addEventListener('change', e => {
-      const idx = e.target.dataset.idx;
-      const newQty = parseInt(e.target.value);
-      if (newQty === 0) delete cart[idx];
-      else cart[idx].qty = newQty;
-      const prodSelect = document.querySelector(`.product select[data-idx="${idx}"]`);
-      if (prodSelect) prodSelect.value = newQty;
-      updateTotals();
-    });
-  });
+  container.querySelectorAll('select').forEach(sel => sel.addEventListener('change', e => {
+    const idx = e.target.dataset.idx;
+    const newQty = parseInt(e.target.value);
+    if(newQty===0) delete cart[idx];
+    else cart[idx].qty = newQty;
+    const prodSelect = document.querySelector(`.product select[data-idx="${idx}"]`);
+    if(prodSelect) prodSelect.value = newQty;
+    updateTotals();
+  }));
 
-  // Event listeners for Remove Item
-  container.querySelectorAll('button').forEach(btn => {
-    btn.addEventListener('click', e => {
-      const idx = e.target.dataset.idx;
-      delete cart[idx];
-      const prodSelect = document.querySelector(`.product select[data-idx="${idx}"]`);
-      if (prodSelect) prodSelect.value = 0;
-      updateTotals();
-    });
-  });
+  // Remove item
+  container.querySelectorAll('button').forEach(btn => btn.addEventListener('click', e => {
+    const idx = e.target.dataset.idx;
+    delete cart[idx];
+    const prodSelect = document.querySelector(`.product select[data-idx="${idx}"]`);
+    if(prodSelect) prodSelect.value = 0;
+    updateTotals();
+  }));
 }
 
 // --- Cart modal open/close ---
-document.getElementById('view-cart-btn').addEventListener('click', () => { document.getElementById('cart-modal').style.display = 'flex'; });
-document.getElementById('close-cart-btn').addEventListener('click', () => { document.getElementById('cart-modal').style.display = 'none'; });
+document.getElementById('view-cart-btn').addEventListener('click',()=>{document.getElementById('cart-modal').style.display='flex'});
+document.getElementById('close-cart-btn').addEventListener('click',()=>{document.getElementById('cart-modal').style.display='none'});
 
-// --- Proceed to Review Order ---
-document.getElementById('proceed-order-btn').addEventListener('click', () => {
-  if (Object.keys(cart).length === 0) { alert("Cart is empty!"); return; }
+// --- Proceed to Review ---
+document.getElementById('proceed-order-btn').addEventListener('click',()=>{
+  if(Object.keys(cart).length===0){alert("Cart is empty!"); return;}
   populateReviewModal();
-  document.getElementById('cart-modal').style.display = 'none';
-  document.getElementById('review-modal').style.display = 'flex';
+  document.getElementById('cart-modal').style.display='none';
+  document.getElementById('review-modal').style.display='flex';
 });
 
-// --- Back to Cart from Review ---
-document.getElementById('back-to-cart-btn').addEventListener('click', () => {
-  document.getElementById('review-modal').style.display = 'none';
-  document.getElementById('cart-modal').style.display = 'flex';
+// --- Back to Cart ---
+document.getElementById('back-to-cart-btn').addEventListener('click',()=>{
+  document.getElementById('review-modal').style.display='none';
+  document.getElementById('cart-modal').style.display='flex';
 });
 
-// --- Populate Review Modal with headers ---
+// --- Populate Review Modal ---
 function populateReviewModal() {
   const reviewItems = document.getElementById('review-items');
   reviewItems.innerHTML = '';
   const rate = parseFloat(document.getElementById('rate').value) || 1;
 
-  Object.entries(cart).forEach(([idx, p]) => {
-    const div = document.createElement('div');
-    div.className = 'review-item';
-    div.innerHTML = `
-      <div class="review-item-name">
-        <img src="${p['Item Image']}" alt="${p['Item Name']}">
-        <span>${p['Item Name']}</span>
-      </div>
+  Object.entries(cart).forEach(([idx,p])=>{
+    const div=document.createElement('div');
+    div.className='review-item';
+    div.innerHTML=`
+      <div class="review-item-name"><img src="${p['Item Image']}" alt="${p['Item Name']}"><span>${p['Item Name']}</span></div>
       <div class="review-item-qty">${p.qty}</div>
-      <div class="review-item-weight">${(p['Item Weight'] * p.qty).toFixed(2)} kg</div>
-      <div class="review-item-cad">${(p['Item Price CAD'] * p.qty).toFixed(2)} CAD</div>
-      <div class="review-item-bdt">${(p['Item Price CAD'] * rate * p.qty).toFixed(2)} BDT</div>
+      <div class="review-item-weight">${(p['Item Weight']*p.qty).toFixed(2)} kg</div>
+      <div class="review-item-cad">${(p['Item Price CAD']*p.qty).toFixed(2)} CAD</div>
+      <div class="review-item-bdt">${(p['Item Price CAD']*rate*p.qty).toFixed(2)} BDT</div>
     `;
     reviewItems.appendChild(div);
   });
 
-  // Update review totals
-  document.getElementById('review-total-items').innerText = Object.values(cart).reduce((a, p) => a + p.qty, 0);
-  document.getElementById('review-total-cad').innerText = totalCAD.toFixed(2);
-  document.getElementById('review-total-bdt').innerText = totalBDT.toFixed(2);
-  document.getElementById('review-total-weight').innerText = totalWeight.toFixed(2);
+  // --- Review Modal Totals (2x2 grid) ---
+  const reviewTotals = document.querySelector('#review-modal .review-totals-grid');
+  if(reviewTotals) reviewTotals.innerHTML=`
+    <div><strong>Total Items:</strong> ${Object.values(cart).reduce((a,p)=>a+p.qty,0)}</div>
+    <div><strong>Total Weight:</strong> ${totalWeight.toFixed(2)} kg</div>
+    <div><strong>Total (CAD):</strong> ${totalCAD.toFixed(2)}</div>
+    <div><strong>Total (BDT):</strong> ${totalBDT.toFixed(2)}</div>
+  `;
 }
 
-// --- Submit order from Review Modal ---
-document.getElementById('review-order-form').addEventListener('submit', async e => {
+// --- Submit order ---
+document.getElementById('review-order-form').addEventListener('submit', async e=>{
   e.preventDefault();
-  if (Object.keys(cart).length === 0) { alert("Cart is empty!"); return; }
+  if(Object.keys(cart).length===0){alert("Cart is empty!"); return;}
 
-  const name = document.getElementById('review-name').value.trim();
-  const phone = document.getElementById('review-phone').value.trim();
-  const email = document.getElementById('review-email').value.trim();
-  const deliveryMethod = document.getElementById('review-delivery').value;
+  const name=document.getElementById('review-name').value.trim();
+  const phone=document.getElementById('review-phone').value.trim();
+  const email=document.getElementById('review-email').value.trim();
+  const deliveryMethod=document.getElementById('review-delivery-date').value;
 
-  const orderDetails = Object.values(cart).map((p, i) =>
-    `${i + 1}. ${p['Item Name']} — Qty: ${p.qty} — ${p['Item Price CAD']} CAD — ${(p['Item Price CAD'] * parseFloat(document.getElementById('rate').value)).toFixed(2)} BDT`
-  ).join("\n");
+  const orderDetails=Object.values(cart).map((p,i)=>`${i+1}. ${p['Item Name']} — Qty: ${p.qty} — ${p['Item Price CAD']} CAD — ${(p['Item Price CAD']*parseFloat(document.getElementById('rate').value)).toFixed(2)} BDT`).join("\n");
 
-  const payload = { name, phone, email, deliveryMethod, orderDetails, totalCAD: totalCAD.toFixed(2), totalBDT: totalBDT.toFixed(2), totalWeight: totalWeight.toFixed(2) };
+  const payload={name, phone, email, deliveryMethod, orderDetails, totalCAD:totalCAD.toFixed(2), totalBDT:totalBDT.toFixed(2), totalWeight:totalWeight.toFixed(2)};
 
-  try {
-    // 🟡 Show "Please wait" notice
-    const loadingMsg = document.createElement('div');
-    loadingMsg.id = 'loading-message';
-    loadingMsg.textContent = "⏳ Please wait while we confirm your order...";
-    loadingMsg.style.position = 'fixed';
-    loadingMsg.style.top = '20px';
-    loadingMsg.style.left = '50%';
-    loadingMsg.style.transform = 'translateX(-50%)';
-    loadingMsg.style.background = '#fff8dc';
-    loadingMsg.style.padding = '10px 20px';
-    loadingMsg.style.border = '1px solid #ccc';
-    loadingMsg.style.borderRadius = '8px';
-    loadingMsg.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
-    loadingMsg.style.zIndex = '9999';
+  try{
+    const loadingMsg=document.createElement('div');
+    loadingMsg.id='loading-message';
+    loadingMsg.textContent="⏳ Please wait while we confirm your order...";
+    loadingMsg.style.position='fixed';
+    loadingMsg.style.top='20px';
+    loadingMsg.style.left='50%';
+    loadingMsg.style.transform='translateX(-50%)';
+    loadingMsg.style.background='#fff8dc';
+    loadingMsg.style.padding='10px 20px';
+    loadingMsg.style.border='1px solid #ccc';
+    loadingMsg.style.borderRadius='8px';
+    loadingMsg.style.boxShadow='0 2px 6px rgba(0,0,0,0.2)';
+    loadingMsg.style.zIndex='9999';
     document.body.appendChild(loadingMsg);
 
     const resp = await fetch('/api/send-order', { 
@@ -246,7 +270,7 @@ document.getElementById('review-order-form').addEventListener('submit', async e 
     });
     const text = await resp.text();
     let result;
-    try { result = JSON.parse(text); } catch (e) { result = { error: text }; }
+    try{result=JSON.parse(text);}catch(e){result={error:text};}
 
     // 🟢 Remove loading message
     document.body.removeChild(loadingMsg);
@@ -258,14 +282,14 @@ document.getElementById('review-order-form').addEventListener('submit', async e 
     }
 
     alert(result.message || "✅ Both emails sent successfully!");
-    document.getElementById('review-modal').style.display = 'none';
-    cart = {}; totalCAD = 0; totalBDT = 0; totalWeight = 0;
+    document.getElementById('review-modal').style.display='none';
+    cart={}; totalCAD=0; totalBDT=0; totalWeight=0;
     renderProducts(); updateTotals();
 
-  } catch (err) { 
+  }catch(err){
     document.getElementById('loading-message')?.remove();
-    alert("Failed to send order. Check console."); 
-    console.error(err); 
+    alert("Failed to send order. Check console.");
+    console.error(err);
   }
 });
 
@@ -344,7 +368,6 @@ document.getElementById('rate').addEventListener('input', () => {
   renderProducts();
   updateTotals();
 });
-
 
 // --- Refresh Confirmation ---
 window.addEventListener('beforeunload', function (e) {

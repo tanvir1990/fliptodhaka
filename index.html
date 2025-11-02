@@ -8,6 +8,12 @@
   <!-- Styles -->
   <link rel="stylesheet" href="style.css">
 
+  <!-- Flatpickr CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+  <!-- Flatpickr JS -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
   <!-- Libraries -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
 
@@ -140,7 +146,7 @@
         <label for="review-name">Full Name:</label>
         <input type="text" id="review-name" name="name" required>
 
-        <label for="review-phone">Phone <small>(BD or CDN)</small>:</label>
+        <label for="review-phone">Phone or WhatsApp:</label>
         <input type="text" id="review-phone" name="phone" required>
 
         <label for="review-email">Email Address:</label>
@@ -149,17 +155,16 @@
         <label for="review-delivery">Delivery Option:</label>
         <select id="review-delivery" name="delivery" required>
           <option value="Delivery To Hotel">Delivery To Hotel</option>
-          <option value="pickup">Pickup</option>
         </select>
 
-        <label for="review-delivery-date">Delivery Date:</label>
+        <label for="review-delivery-date">
+          Delivery Date: <span style="font-weight:normal;font-size:12px;color:#555;">(Date can only be selected up to two months in advance)</span>
+        </label>
         <input type="date" id="review-delivery-date" name="delivery-date" required>
-
-        <label for="review-delivery-time">Delivery Time:</label>
-        <input type="time" id="review-delivery-time" name="delivery-time" required>
         <small style="display:block;color:#555;font-size:12px;margin-bottom:8px;">
-          Delivery available between 6pm-12am. Meet at Hotel Lobby.
+          Delivery currently available only Directly to Your Hotel between 9pm-12am. Please contact us to arrange alternatives.
         </small>
+
 
         <div class="modal-actions">
           <button type="button" id="back-to-cart-btn">Back to Cart</button>
