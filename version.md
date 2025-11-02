@@ -1,26 +1,40 @@
-# 🧾 FlipToDhaka — Version 1.16 (Stable Development Lock)
+# 🧾 FlipToDhaka — Version 1.17 (Stable Development Lock)
 
 **Release Type:** Stable  
-**Version:** 1.16  
+**Version:** 1.17  
 **Deployment:** Vercel  
 
 **Development:** In Progress  
-**Dev Version:** 1.17  
+**Dev Version:** 1.18  
 ---
 
 ## 🧩 Overview
-Stable release building upon Version 1.15 with **enhanced order confirmation feedback** for customers.  
-This version ensures users see a **“Please wait while we confirm your order”** message while emails are being processed, improving the user experience during order submission.  
-All previous modules, front-end and API integrations, remain fully verified and stable.
+Stable release building on v1.16 with **full front-end/cart enhancements and live exchange rate updates**.  
+Key improvements include **compact CSS**, **live product filtering & sorting**, **sticky cart collapse/expand logic**, and **refresh protection**.  
+All previous modules, including Brevo email integration, remain fully verified and stable.
 
-**Key Updates from v1.15:**
-- Added **order submission feedback**:  
-  - Shows temporary message *“Please wait while we confirm your order…”* after customer clicks **Submit Order**.  
-  - Message is removed once both emails (owner + customer) are successfully sent.  
-  - Original success alert *“Both emails sent successfully”* is retained after processing.  
-- Ensures users are informed of backend activity during the short email sending delay.  
-- No visual or layout changes outside of the temporary notice.  
-- All previous features (cart, review modal, refresh protection, Brevo email integration) fully intact.
+**Key Updates from v1.16:**
+- **Cart & UI Enhancements:**
+  - Sticky cart auto-expands to content height, collapses to 40px with triangle toggle.
+  - Mobile-friendly sticky cart; desktop shows in corner.
+  - Cart modal & product selectors remain in sync on quantity changes.
+  - Cart totals live update CAD, BDT, and weight dynamically.
+- **Product Rendering & Filtering:**
+  - Live exchange rate updates both CAD→BDT pricing in real time.
+  - Category filter dynamically populated from CSV.
+  - Sorting by CAD/BDT price & weight functional.
+  - View style toggle between thumbnails, grid, and list.
+- **Order Review & Submission:**
+  - Review modal shows complete cart summary with totals.
+  - Inline quantity updates reflected in both cart and review modal.
+  - Order submission triggers **temporary “Please wait…” notice**.
+  - Successful submission resets cart and products seamlessly.
+- **Refresh Protection:**
+  - Warns user before page reload if cart or form data exists.
+- **Compact & Optimized CSS:**
+  - Clean, lightweight, responsive styles for all components.
+- **API Integration:**
+  - `/api/send-order.js` handles CORS, validation, and Brevo emails to both owner & customer.
 
 ---
 
@@ -28,28 +42,29 @@ All previous modules, front-end and API integrations, remain fully verified and 
 | Feature | Description | Status |
 |:--------|:-------------|:------:|
 | Responsive Layout | Adaptive container, grid support | ✅ |
-| Product Display | Default **thumbnails view**, Grid / List toggle | ✅ |
-| Exchange Rate Input | CAD → BDT conversion with live updates | ✅ |
-| Category Filter | Dynamically populated from CSV data | ✅ |
-| Sorting Options | Sort by price (CAD/BDT) and weight | ✅ |
-| View Style Toggle | Switch between grid, list, or thumbnail layouts | ✅ |
-| **Refresh Confirmation** | Prevents accidental data loss on reload | ✅ |
-| **Order Submission Feedback** | Shows "Please wait..." during order processing | ✅ |
+| Product Display | Default thumbnails view, toggle grid/list | ✅ |
+| Exchange Rate Input | CAD → BDT live updates | ✅ |
+| Category Filter | Dynamic from CSV | ✅ |
+| Sorting Options | By CAD/BDT price & weight | ✅ |
+| View Style Toggle | Switch grid/list/thumbnail | ✅ |
+| Sticky Cart | Collapsible, mobile-friendly, dynamic height | ✅ |
+| Refresh Confirmation | Warns before data loss | ✅ |
+| Order Submission Feedback | Shows "Please wait..." | ✅ |
 
 ---
 
 ## 🛒 Cart System
 | Feature | Description | Status |
 |:--------|:-------------|:------:|
-| Live Cart Summary | Displays totals + weight in real time | ✅ |
-| Collapse / Expand Cart | Smooth visibility toggle with proper triangle ▲/▼ | ✅ |
-| Mobile Sticky Cart | Fixed at bottom on mobile; desktop stays top-right | ✅ |
-| Add / Remove Products | Real-time updates with quantity control | ✅ |
-| Cart Modal | Shows selected items + editable quantities | ✅ |
-| Sync with Product List | Cart and product selectors stay in sync | ✅ |
-| Auto Totals | Live recalculation of CAD, BDT, and weight | ✅ |
-| Dynamic Height | Sticky cart expands/collapses based on content & window size | ✅ |
-| **Reload Protection** | Prompts before page refresh when cart is not empty | ✅ |
+| Live Cart Summary | Totals + weight real-time | ✅ |
+| Collapse / Expand Cart | Smooth toggle with triangle | ✅ |
+| Mobile Sticky Cart | Bottom of screen; desktop top-right | ✅ |
+| Add / Remove Products | Quantity selectors in product & modal | ✅ |
+| Cart Modal | Editable quantities, live totals | ✅ |
+| Sync with Product List | Quantity updates reflected | ✅ |
+| Auto Totals | CAD, BDT, weight recalculated live | ✅ |
+| Dynamic Height | Adjusts with content & window size | ✅ |
+| Reload Protection | Prevents accidental refresh | ✅ |
 
 ---
 
@@ -57,12 +72,12 @@ All previous modules, front-end and API integrations, remain fully verified and 
 | Feature | Description | Status |
 |:--------|:-------------|:------:|
 | Review Modal | Summarizes order before submission | ✅ |
-| Customer Info Form | Name, phone, email, delivery method, time | ✅ |
-| Navigation Flow | Seamless Back ↔ Next navigation | ✅ |
-| Validation | Prevents empty or invalid orders | ✅ |
+| Customer Info Form | Name, phone, email, delivery method/date/time | ✅ |
+| Navigation Flow | Seamless Back ↔ Next | ✅ |
+| Validation | Prevents empty/invalid orders | ✅ |
 | Status Feedback | Inline success/error messages | ✅ |
-| **Data Loss Warning** | Warns before refresh if form contains info | ✅ |
-| **Order Confirmation Feedback** | Temporary notice during email processing | ✅ |
+| Data Loss Warning | Refresh prompts if data exists | ✅ |
+| Order Confirmation Feedback | Temporary "Please wait…" notice | ✅ |
 
 ---
 
@@ -71,8 +86,8 @@ All previous modules, front-end and API integrations, remain fully verified and 
 |:--------|:-------------|:------:|
 | `/api/send-order.js` | Handles POST order submissions | ✅ |
 | CORS Handling | Preflight support (OPTIONS) | ✅ |
-| Brevo Integration | Sends emails to Owner + Customer | ✅ |
-| Template Variables | Injects order details and totals | ✅ |
+| Brevo Integration | Emails to Owner + Customer | ✅ |
+| Template Variables | Injects order details & totals | ✅ |
 | Env Validation | Safe checks for missing config | ✅ |
 | Structured Responses | JSON success/error returns | ✅ |
 
@@ -85,7 +100,7 @@ All previous modules, front-end and API integrations, remain fully verified and 
 | Sanitization | Numeric fields converted safely | ✅ |
 | Efficient DOM Render | Dynamic injection of products | ✅ |
 | Exchange Rate Binding | Live update on input change | ✅ |
-| Lightweight CSS | Compact ≈ 1 KB optimized styles | ✅ |
+| Lightweight CSS | Compact ~1 KB optimized styles | ✅ |
 
 ---
 
