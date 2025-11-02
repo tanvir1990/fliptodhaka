@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // ✅ Set default view to thumbnails
     document.getElementById('view-style').value = 'thumbnails';
-
     renderProducts();
     updateTotals();
 
@@ -100,7 +99,7 @@ function updateTotals() {
   renderCartModal();
 }
 
-// --- Render Cart Modal ---
+// --- Render Cart Modal with headers ---
 function renderCartModal() {
   const container = document.getElementById('cart-modal-items');
   container.innerHTML = '';
@@ -110,23 +109,32 @@ function renderCartModal() {
     const div = document.createElement('div');
     div.className = 'cart-item';
     div.innerHTML = `
-      <div>${p['Item Name']}</div>
-      <select data-idx="${idx}">
-        ${[...Array(11).keys()].map(q => `<option value="${q}" ${q == p.qty ? 'selected' : ''}>${q}</option>`).join('')}
-      </select>
-      <div>${(p['Item Price CAD'] * p.qty).toFixed(2)} CAD</div>
-      <div>${(p['Item Price CAD'] * rate * p.qty).toFixed(2)} BDT</div>
-      <div>Weight: ${(p['Item Weight'] * p.qty).toFixed(2)} kg</div>
-      <button data-idx="${idx}">Delete</button>
+      <div class="cart-item-name">
+        <img src="${p['Item Image']}" alt="${p['Item Name']}">
+        <span>${p['Item Name']}</span>
+      </div>
+      <div class="cart-item-qty">
+        <select data-idx="${idx}">
+          ${[...Array(11).keys()].map(q => `<option value="${q}" ${q == p.qty ? 'selected' : ''}>${q}</option>`).join('')}
+        </select>
+      </div>
+      <div class="cart-item-weight">${(p['Item Weight'] * p.qty).toFixed(2)} kg</div>
+      <div class="cart-item-cad">${(p['Item Price CAD'] * p.qty).toFixed(2)} CAD</div>
+      <div class="cart-item-bdt">${(p['Item Price CAD'] * rate * p.qty).toFixed(2)} BDT</div>
+      <div class="cart-item-action">
+        <button data-idx="${idx}">Remove Item</button>
+      </div>
     `;
     container.appendChild(div);
   });
 
+  // Update modal totals
   document.getElementById('modal-total-items').innerText = Object.values(cart).reduce((a, p) => a + p.qty, 0);
   document.getElementById('modal-total-cad').innerText = totalCAD.toFixed(2);
   document.getElementById('modal-total-bdt').innerText = totalBDT.toFixed(2);
   document.getElementById('modal-total-weight').innerText = totalWeight.toFixed(2);
 
+  // Event listeners for quantity change
   container.querySelectorAll('select').forEach(sel => {
     sel.addEventListener('change', e => {
       const idx = e.target.dataset.idx;
@@ -139,6 +147,7 @@ function renderCartModal() {
     });
   });
 
+  // Event listeners for Remove Item
   container.querySelectorAll('button').forEach(btn => {
     btn.addEventListener('click', e => {
       const idx = e.target.dataset.idx;
@@ -168,24 +177,29 @@ document.getElementById('back-to-cart-btn').addEventListener('click', () => {
   document.getElementById('cart-modal').style.display = 'flex';
 });
 
-// --- Populate Review Modal ---
+// --- Populate Review Modal with headers ---
 function populateReviewModal() {
   const reviewItems = document.getElementById('review-items');
   reviewItems.innerHTML = '';
   const rate = parseFloat(document.getElementById('rate').value) || 1;
+
   Object.entries(cart).forEach(([idx, p]) => {
     const div = document.createElement('div');
     div.className = 'review-item';
     div.innerHTML = `
-      <div>${p['Item Name']}</div>
-      <div>${p.qty}</div>
-      <div>${(p['Item Price CAD'] * p.qty).toFixed(2)} CAD</div>
-      <div>${(p['Item Price CAD'] * rate * p.qty).toFixed(2)} BDT</div>
-      <div>Weight: ${(p['Item Weight'] * p.qty).toFixed(2)} kg</div>
+      <div class="review-item-name">
+        <img src="${p['Item Image']}" alt="${p['Item Name']}">
+        <span>${p['Item Name']}</span>
+      </div>
+      <div class="review-item-qty">${p.qty}</div>
+      <div class="review-item-weight">${(p['Item Weight'] * p.qty).toFixed(2)} kg</div>
+      <div class="review-item-cad">${(p['Item Price CAD'] * p.qty).toFixed(2)} CAD</div>
+      <div class="review-item-bdt">${(p['Item Price CAD'] * rate * p.qty).toFixed(2)} BDT</div>
     `;
     reviewItems.appendChild(div);
   });
 
+  // Update review totals
   document.getElementById('review-total-items').innerText = Object.values(cart).reduce((a, p) => a + p.qty, 0);
   document.getElementById('review-total-cad').innerText = totalCAD.toFixed(2);
   document.getElementById('review-total-bdt').innerText = totalBDT.toFixed(2);
@@ -331,10 +345,8 @@ document.getElementById('rate').addEventListener('input', () => {
   updateTotals();
 });
 
-// ========================================================
-// 🧠 NEW FEATURE: Refresh confirmation (v1.15 enhancement)
-// ========================================================
 
+// --- Refresh Confirmation ---
 window.addEventListener('beforeunload', function (e) {
   const hasCartItems = Object.keys(cart).length > 0;
   const name = document.getElementById('review-name')?.value.trim();

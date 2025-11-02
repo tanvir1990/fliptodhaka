@@ -32,19 +32,8 @@ body {margin:0;font-family:Arial,sans-serif;background:#f9f9f9;color:#333}
 .cart-header button {background:none;border:none;color:#fff;font-size:14px;user-select:none}
 
 /* --- Collapse/Expand Triangle Button --- */
-#collapse-cart-btn {
-  cursor:pointer;
-  font-size:18px;
-  border:none;
-  background:none;
-  outline:none;
-  display:inline-block;
-  margin-left:10px;
-  transition: transform 0.3s ease;
-}
-#cart-summary.collapsed + #collapse-cart-btn {
-  transform: rotate(180deg);
-}
+#collapse-cart-btn {cursor:pointer;font-size:18px;border:none;background:none;outline:none;display:inline-block;margin-left:10px;transition: transform 0.3s ease}
+#cart-summary.collapsed + #collapse-cart-btn {transform: rotate(180deg)}
 
 /* --- Cart Content --- */
 .cart-content {padding:10px}
@@ -57,8 +46,16 @@ body {margin:0;font-family:Arial,sans-serif;background:#f9f9f9;color:#333}
 .modal-content {background:#fff;border-radius:10px;padding:20px;max-width:550px;width:90%;max-height:90%;overflow-y:auto;box-shadow:0 10px 30px rgba(0,0,0,0.3);position:relative;animation:fadeIn 0.3s}
 @keyframes fadeIn {from {opacity:0;transform:translateY(-20px)} to {opacity:1;transform:translateY(0)}}
 
+/* --- Modal Headers (Cart & Review) --- */
+.cart-modal-headers {display:grid;grid-template-columns:3fr 1fr 1fr 1fr 1fr 1fr;gap:5px;padding:5px 0;font-weight:bold;border-bottom:1px solid #ccc;margin-bottom:5px;color:#333}
+.cart-modal-headers div {text-align:center}
+
 /* --- Items --- */
-.cart-item,.review-item {display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;align-items:center;gap:5px;padding:6px 0;border-bottom:1px solid #eee}
+.cart-item,.review-item {display:grid;grid-template-columns:3fr 1fr 1fr 1fr 1fr 1fr;align-items:center;gap:5px;padding:6px 0;border-bottom:1px solid #eee;transition:background 0.2s}
+.cart-item:nth-child(odd),.review-item:nth-child(odd){background:#f9f9f9}
+.cart-item:hover,.review-item:hover {background:#f1f1f1}
+.cart-item div,.review-item div {text-align:center;display:flex;align-items:center;justify-content:center;gap:5px}
+.cart-item img,.review-item img {width:40px;height:40px;object-fit:contain;border-radius:4px}
 .cart-item select,.review-item select {width:50px;padding:3px;border-radius:4px;border:1px solid #ccc}
 .cart-item button {padding:4px 6px;border:none;background:#dc3545;color:#fff;border-radius:4px;cursor:pointer;transition:background 0.2s}
 .cart-item button:hover {background:#c82333}
@@ -77,3 +74,6 @@ body {margin:0;font-family:Arial,sans-serif;background:#f9f9f9;color:#333}
 #review-order-form label {margin-top:6px;font-weight:bold}
 #review-order-form input,#review-order-form select {width:100%;margin-top:2px;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:14px}
 #review-order-status {color:#007bff;font-size:13px;margin-top:5px}
+
+
+

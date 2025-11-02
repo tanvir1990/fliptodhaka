@@ -86,6 +86,14 @@
   <div id="cart-modal" class="cart-modal" aria-hidden="true" role="dialog">
     <div class="modal-content">
       <h2>Your Cart</h2>
+      <div class="cart-modal-headers">
+        <div>Item</div>
+        <div>Qty</div>
+        <div>Weight</div>
+        <div>CAD</div>
+        <div>BDT</div>
+        <div>Action</div>
+      </div>
       <div id="cart-modal-items"></div>
 
       <div class="cart-modal-totals">
@@ -107,14 +115,21 @@
     <div class="modal-content">
       <h2>Review Order</h2>
 
-      <div id="review-order-summary">
-        <div id="review-items"></div>
-        <div class="review-totals">
-          <p>Total Items: <span id="review-total-items">0</span></p>
-          <p>Total Weight: <span id="review-total-weight">0</span> kg</p>
-          <p>Total (CAD): <span id="review-total-cad">0</span></p>
-          <p>Total (BDT): <span id="review-total-bdt">0</span></p>
-        </div>
+      <div class="cart-modal-headers">
+        <div>Item</div>
+        <div>Qty</div>
+        <div>Weight</div>
+        <div>CAD</div>
+        <div>BDT</div>
+      </div>
+
+      <div id="review-items"></div>
+
+      <div class="review-totals">
+        <p>Total Items: <span id="review-total-items">0</span></p>
+        <p>Total Weight: <span id="review-total-weight">0</span> kg</p>
+        <p>Total (CAD): <span id="review-total-cad">0</span></p>
+        <p>Total (BDT): <span id="review-total-bdt">0</span></p>
       </div>
 
       <hr/>
