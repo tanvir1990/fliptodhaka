@@ -1,24 +1,26 @@
-# 🧾 FlipToDhaka — Version 1.15 (Stable Development Lock)
+# 🧾 FlipToDhaka — Version 1.16 (Stable Development Lock)
 
 **Release Type:** Stable  
-**Version:** 1.15  
+**Version:** 1.16  
 **Deployment:** Vercel  
 
 **Development:** In Progress  
-**Dev Version:** 1.16  
+**Dev Version:** 1.17  
 ---
 
 ## 🧩 Overview
-Stable release building upon Version 1.14 with a **new refresh confirmation safeguard** to prevent accidental data loss.  
-Includes all previously verified modules: **sticky cart**, **cart modal syncing**, **review order flow**, and **email integration**.  
-This version enhances user experience by ensuring cart and form data aren’t lost unintentionally during page reloads.
+Stable release building upon Version 1.15 with **enhanced order confirmation feedback** for customers.  
+This version ensures users see a **“Please wait while we confirm your order”** message while emails are being processed, improving the user experience during order submission.  
+All previous modules, front-end and API integrations, remain fully verified and stable.
 
-**Key Updates from v1.14:**
-- Added **refresh confirmation prompt** when user attempts to reload the page with existing cart or review data.  
-- User receives alert: *“Refreshing the page will Clear the Cart and all information. Would you like to continue?”*  
-- Selecting **Yes** refreshes and clears everything; selecting **No** cancels the reload.  
-- Implementation uses native browser confirmation (no layout or style changes).  
-- No other functions or visuals modified.
+**Key Updates from v1.15:**
+- Added **order submission feedback**:  
+  - Shows temporary message *“Please wait while we confirm your order…”* after customer clicks **Submit Order**.  
+  - Message is removed once both emails (owner + customer) are successfully sent.  
+  - Original success alert *“Both emails sent successfully”* is retained after processing.  
+- Ensures users are informed of backend activity during the short email sending delay.  
+- No visual or layout changes outside of the temporary notice.  
+- All previous features (cart, review modal, refresh protection, Brevo email integration) fully intact.
 
 ---
 
@@ -32,6 +34,7 @@ This version enhances user experience by ensuring cart and form data aren’t lo
 | Sorting Options | Sort by price (CAD/BDT) and weight | ✅ |
 | View Style Toggle | Switch between grid, list, or thumbnail layouts | ✅ |
 | **Refresh Confirmation** | Prevents accidental data loss on reload | ✅ |
+| **Order Submission Feedback** | Shows "Please wait..." during order processing | ✅ |
 
 ---
 
@@ -59,6 +62,7 @@ This version enhances user experience by ensuring cart and form data aren’t lo
 | Validation | Prevents empty or invalid orders | ✅ |
 | Status Feedback | Inline success/error messages | ✅ |
 | **Data Loss Warning** | Warns before refresh if form contains info | ✅ |
+| **Order Confirmation Feedback** | Temporary notice during email processing | ✅ |
 
 ---
 
