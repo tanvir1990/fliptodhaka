@@ -48,8 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const info = document.createElement('div');
           info.style.fontSize = '12px';
           info.style.color = '#555';
-          info.style.marginBottom = '4px';
-          info.textContent = 'Delivery available only on Tuesday, Thursday, Saturday, up to 2 months in advance';
+          info.style.marginBottom = '4px';        
           instance.calendarContainer.prepend(info);
         }
       });
