@@ -1,40 +1,32 @@
-# 🧾 FlipToDhaka — Version 1.17 (Stable Development Lock)
+# 🧾 FlipToDhaka — Version 1.18 (Stable Development Lock)
 
 **Release Type:** Stable  
-**Version:** 1.17  
+**Version:** 1.18  
 **Deployment:** Vercel  
 
-**Development:** In Progress  
+**Development:** Completed  
 **Dev Version:** 1.18  
 ---
 
 ## 🧩 Overview
-Stable release building on v1.16 with **full front-end/cart enhancements and live exchange rate updates**.  
-Key improvements include **compact CSS**, **live product filtering & sorting**, **sticky cart collapse/expand logic**, and **refresh protection**.  
-All previous modules, including Brevo email integration, remain fully verified and stable.
+Stable release building on v1.17 with **enhanced Review Order modal, delivery date restrictions, and improved totals display**.  
+Key improvements include **delivery date picker restrictions**, **totals displayed in 2x2 grids for cart & review modals**, and **delivery instructions added**.  
+All previous modules, including Brevo email integration and sticky cart functionality, remain fully verified and stable.
 
-**Key Updates from v1.16:**
-- **Cart & UI Enhancements:**
-  - Sticky cart auto-expands to content height, collapses to 40px with triangle toggle.
-  - Mobile-friendly sticky cart; desktop shows in corner.
-  - Cart modal & product selectors remain in sync on quantity changes.
-  - Cart totals live update CAD, BDT, and weight dynamically.
-- **Product Rendering & Filtering:**
-  - Live exchange rate updates both CAD→BDT pricing in real time.
-  - Category filter dynamically populated from CSV.
-  - Sorting by CAD/BDT price & weight functional.
-  - View style toggle between thumbnails, grid, and list.
-- **Order Review & Submission:**
-  - Review modal shows complete cart summary with totals.
-  - Inline quantity updates reflected in both cart and review modal.
-  - Order submission triggers **temporary “Please wait…” notice**.
-  - Successful submission resets cart and products seamlessly.
-- **Refresh Protection:**
-  - Warns user before page reload if cart or form data exists.
-- **Compact & Optimized CSS:**
-  - Clean, lightweight, responsive styles for all components.
-- **API Integration:**
-  - `/api/send-order.js` handles CORS, validation, and Brevo emails to both owner & customer.
+**Key Updates from v1.17:**
+- **Review Order & Delivery Enhancements:**
+  - Delivery date can only be selected on **Tuesday, Thursday, and Saturday**.
+  - Past dates and dates beyond **two months in advance** are disabled.
+  - Greyed out dates in calendar for unavailable delivery days.
+  - Delivery time removed; added informational text: "Delivery currently available only to Hotel between 9pm-12am. Please contact us to arrange alternatives."
+
+- **Cart & Review Totals Grid:**
+  - Totals displayed in **2x2 grid** for both Cart Modal and Review Modal.
+  - Labels bolded for better readability.
+- **General Improvements:**
+  - Maintained live totals updates (CAD, BDT, weight) in both cart and review modal.
+  - All previous cart, filtering, sorting, and exchange rate features preserved.
+  - Flatpickr library used for date picker with disabled days.
 
 ---
 
@@ -50,6 +42,8 @@ All previous modules, including Brevo email integration, remain fully verified a
 | Sticky Cart | Collapsible, mobile-friendly, dynamic height | ✅ |
 | Refresh Confirmation | Warns before data loss | ✅ |
 | Order Submission Feedback | Shows "Please wait..." | ✅ |
+| Delivery Date Picker | Restricted days + max 2 months | ✅ |
+| Delivery Info Text | Clear instructions for users | ✅ |
 
 ---
 
@@ -60,7 +54,7 @@ All previous modules, including Brevo email integration, remain fully verified a
 | Collapse / Expand Cart | Smooth toggle with triangle | ✅ |
 | Mobile Sticky Cart | Bottom of screen; desktop top-right | ✅ |
 | Add / Remove Products | Quantity selectors in product & modal | ✅ |
-| Cart Modal | Editable quantities, live totals | ✅ |
+| Cart Modal | Editable quantities, live totals in 2x2 grid | ✅ |
 | Sync with Product List | Quantity updates reflected | ✅ |
 | Auto Totals | CAD, BDT, weight recalculated live | ✅ |
 | Dynamic Height | Adjusts with content & window size | ✅ |
@@ -72,7 +66,10 @@ All previous modules, including Brevo email integration, remain fully verified a
 | Feature | Description | Status |
 |:--------|:-------------|:------:|
 | Review Modal | Summarizes order before submission | ✅ |
-| Customer Info Form | Name, phone, email, delivery method/date/time | ✅ |
+| Totals Grid | 2x2 display of items, weight, CAD & BDT | ✅ |
+| Customer Info Form | Name, phone, email, delivery date | ✅ |
+| Delivery Restrictions | Only Tue/Thu/Sat; no past dates; max 2 months | ✅ |
+| Delivery Instructions | Text indicating delivery hours | ✅ |
 | Navigation Flow | Seamless Back ↔ Next | ✅ |
 | Validation | Prevents empty/invalid orders | ✅ |
 | Status Feedback | Inline success/error messages | ✅ |
@@ -106,7 +103,7 @@ All previous modules, including Brevo email integration, remain fully verified a
 
 ## ⚙️ Technical Details
 **Languages:** HTML + CSS + JavaScript (front-end), Node.js (API)  
-**Dependencies:** PapaParse 5.3.2, Brevo SMTP API  
+**Dependencies:** PapaParse 5.3.2, Brevo SMTP API, Flatpickr  
 **Architecture:** Static front-end + serverless email backend  
 
 **Environment Variables**
