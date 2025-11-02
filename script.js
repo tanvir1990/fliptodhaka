@@ -62,6 +62,7 @@ function renderProducts() {
       <h3>${p['Item Name']}</h3>
       <p>${p['Item Category']}</p>
       <p>${p['Item Price CAD']} CAD / ${(p['Item Price CAD'] * rate).toFixed(2)} BDT</p>
+      <p>Weight: ${p['Item Weight']} kg</p>
       <label>Qty:
         <select data-idx="${i}">
           ${[...Array(11).keys()].map(q => `<option value="${q}" ${q === selectedQuantities[i] ? 'selected' : ''}>${q}</option>`).join('')}
@@ -115,6 +116,7 @@ function renderCartModal() {
       </select>
       <div>${(p['Item Price CAD'] * p.qty).toFixed(2)} CAD</div>
       <div>${(p['Item Price CAD'] * rate * p.qty).toFixed(2)} BDT</div>
+      <div>Weight: ${(p['Item Weight'] * p.qty).toFixed(2)} kg</div>
       <button data-idx="${idx}">Delete</button>
     `;
     container.appendChild(div);
@@ -179,6 +181,7 @@ function populateReviewModal() {
       <div>${p.qty}</div>
       <div>${(p['Item Price CAD'] * p.qty).toFixed(2)} CAD</div>
       <div>${(p['Item Price CAD'] * rate * p.qty).toFixed(2)} BDT</div>
+      <div>Weight: ${(p['Item Weight'] * p.qty).toFixed(2)} kg</div>
     `;
     reviewItems.appendChild(div);
   });
@@ -206,7 +209,7 @@ document.getElementById('review-order-form').addEventListener('submit', async e 
   const payload = { name, phone, email, deliveryMethod, orderDetails, totalCAD: totalCAD.toFixed(2), totalBDT: totalBDT.toFixed(2), totalWeight: totalWeight.toFixed(2) };
 
   try {
-    // 🟡 NEW: Show "Please wait" notice
+    // 🟡 Show "Please wait" notice
     const loadingMsg = document.createElement('div');
     loadingMsg.id = 'loading-message';
     loadingMsg.textContent = "⏳ Please wait while we confirm your order...";
@@ -231,7 +234,7 @@ document.getElementById('review-order-form').addEventListener('submit', async e 
     let result;
     try { result = JSON.parse(text); } catch (e) { result = { error: text }; }
 
-    // 🟢 Remove loading message once response received
+    // 🟢 Remove loading message
     document.body.removeChild(loadingMsg);
 
     if (!resp.ok) { 
@@ -287,8 +290,11 @@ function filterProducts() {
       <h3>${p['Item Name']}</h3>
       <p>${p['Item Category']}</p>
       <p>${p['Item Price CAD']} CAD / ${(p['Item Price CAD'] * rate).toFixed(2)} BDT</p>
+      <p>Weight: ${p['Item Weight']} kg</p>
       <label>Qty:
-        <select data-idx="${idx}">${[...Array(11).keys()].map(q => `<option value="${q}" ${q === selectedQuantities[idx] ? 'selected' : ''}>${q}</option>`).join('')}</select>
+        <select data-idx="${idx}">
+          ${[...Array(11).keys()].map(q => `<option value="${q}" ${q === selectedQuantities[idx] ? 'selected' : ''}>${q}</option>`).join('')}
+        </select>
       </label>
     `;
     list.appendChild(div);

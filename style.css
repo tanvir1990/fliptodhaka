@@ -20,6 +20,9 @@ body {margin:0;font-family:Arial,sans-serif;background:#f9f9f9;color:#333}
 .product h3 {font-size:16px;margin:5px 0}
 .product p {margin:3px 0;font-size:14px}
 
+/* --- Product Weight --- */
+.product p.weight,.cart-item div.weight,.review-item div.weight{font-size:0.9em;color:#555;margin:2px 0 0 0}
+
 /* --- Sticky Cart --- */
 .sticky-cart {position:fixed;bottom:0;left:10px;right:10px;background:#fff;border-radius:10px 10px 0 0;box-shadow:0 -4px 15px rgba(0,0,0,0.2);overflow:hidden;transition:0.3s;z-index:100}
 @media (min-width:768px) {.sticky-cart {width:220px;right:10px;left:auto;bottom:10px;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,0.2)}}
