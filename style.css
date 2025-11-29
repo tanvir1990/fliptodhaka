@@ -78,99 +78,18 @@ body {margin:0;font-family:Arial,sans-serif;background:#f9f9f9;color:#333}
 #review-order-form input,#review-order-form select {width:100%;margin-top:2px;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:14px}
 #review-order-status {color:#007bff;font-size:13px;margin-top:5px}
 
-
-.cart-item {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto auto; /* 5 columns: image, name, qty, weight, price */
-  align-items: center;
-  gap: 8px;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-}
-
-/* Column 1: Image + Remove stacked */
-.cart-item-image {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  align-items: flex-start;
-}
-
-.cart-item-image img {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-
-.cart-item-image button.remove-under-image {
-  padding: 4px 6px;
-  font-size: 12px;
-  background: #d9534f;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.cart-item-image button.remove-under-image:hover {
-  background: #c9302c;
-}
-
-/* Column 2: Item Name */
-.cart-item-name-text {
-  font-weight: 500;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-}
-
-/* Column 3: Quantity selector */
-.cart-item-qty select {
-  padding: 4px;
-  font-size: 14px;
-  width: 50px;
-}
-
-/* Column 4: Weight */
-.cart-item-weight {
-  text-align: right;
-  white-space: nowrap;
-}
-
-/* Column 5: Price CAD / BDT stacked */
-.cart-item-price {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  text-align: right;
-}
-
-.cart-item-price div {
-  line-height: 1.2;
-  white-space: nowrap; /* keep each value together */
-}
-
-/* --- Responsive: Mobile --- */
-@media (max-width: 550px) {
-  .cart-item {
-    grid-template-columns: auto 1fr auto auto auto; /* keep same structure */
-    gap: 4px;
-  }
-
-  .cart-item-image img {
-    width: 60px;
-    height: 60px;
-  }
-
-  .cart-item-qty select {
-    width: 40px;
-  }
-
-  .cart-item-price {
-    align-items: flex-start; /* allow price to wrap if needed */
-    text-align: left;
-  }
-}
+/* --- Cart Modal --- */
+.cart-item{display:grid;grid-template-columns:auto 1fr auto auto auto;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #eee}
+.cart-item-image{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.cart-item-image img{width:80px;height:80px;object-fit:cover;border-radius:4px}
+.cart-item-image button.remove-under-image{width:100%;max-width:80px;padding:6px;font-size:10px;background:#d9534f;color:#fff;border:none;border-radius:4px;cursor:pointer}
+.cart-item-image button.remove-under-image:hover{background:#c9302c}
+.cart-item-name-text{font-weight:500;word-wrap:break-word;overflow-wrap:break-word}
+.cart-item-qty select{padding:4px;font-size:14px;width:50px}
+.cart-item-weight{text-align:right;white-space:nowrap}
+.cart-item-price{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+.cart-item-price div{line-height:1.2;white-space:nowrap}
+@media(max-width:550px){.cart-item{gap:4px}.cart-item-image img{width:60px;height:60px}.cart-item-qty select{width:40px}.cart-item-price{align-items:flex-start;text-align:left}}
 
 
 

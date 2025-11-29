@@ -1,11 +1,11 @@
 # 🧾 FlipToDhaka — Version 1.18 (Stable Development Lock)
 
 **Release Type:** Stable  
-**Version:** 1.18  
+**Version:** 1.19  
 **Deployment:** Vercel  
 
-**Development:** In Progress
-**Dev Version:** 1.19  
+**Development:** To be starte
+**Dev Version:** 1.20 
 ---
 
 ## 🧩 Overview
