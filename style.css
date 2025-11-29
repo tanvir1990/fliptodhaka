@@ -80,20 +80,20 @@ body {margin:0;font-family:Arial,sans-serif;background:#f9f9f9;color:#333}
 
 
 .cart-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto; /* 5 columns: image, name, qty, weight, price */
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   padding: 8px 0;
   border-bottom: 1px solid #eee;
 }
 
-/* Column 1: Image + Remove button stacked */
+/* Column 1: Image + Remove stacked */
 .cart-item-image {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 4px;
-  width: 100px; /* adjust as needed */
+  align-items: flex-start;
 }
 
 .cart-item-image img {
@@ -119,8 +119,9 @@ body {margin:0;font-family:Arial,sans-serif;background:#f9f9f9;color:#333}
 
 /* Column 2: Item Name */
 .cart-item-name-text {
-  flex: 1; /* take remaining space */
   font-weight: 500;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* Column 3: Quantity selector */
@@ -132,22 +133,44 @@ body {margin:0;font-family:Arial,sans-serif;background:#f9f9f9;color:#333}
 
 /* Column 4: Weight */
 .cart-item-weight {
-  width: 80px;
   text-align: right;
+  white-space: nowrap;
 }
 
 /* Column 5: Price CAD / BDT stacked */
 .cart-item-price {
-  width: 100px;       /* or slightly larger if needed */
-  text-align: right;
   display: flex;
-  flex-direction: column; /* stack CAD / BDT */
-  align-items: flex-end;  /* right-align stacked values */
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
 }
 
 .cart-item-price div {
   line-height: 1.2;
-  white-space: nowrap; /* keep each value + unit together */
+  white-space: nowrap; /* keep each value together */
 }
+
+/* --- Responsive: Mobile --- */
+@media (max-width: 550px) {
+  .cart-item {
+    grid-template-columns: auto 1fr auto auto auto; /* keep same structure */
+    gap: 4px;
+  }
+
+  .cart-item-image img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .cart-item-qty select {
+    width: 40px;
+  }
+
+  .cart-item-price {
+    align-items: flex-start; /* allow price to wrap if needed */
+    text-align: left;
+  }
+}
+
 
 
