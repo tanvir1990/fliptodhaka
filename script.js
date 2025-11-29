@@ -135,25 +135,45 @@ function renderCartModal() {
   Object.entries(cart).forEach(([idx, p]) => {
     const div = document.createElement('div');
     div.className = 'cart-item';
+
     div.innerHTML = `
-      <div class="cart-item-name">
+      <!-- Column 1: Image + Remove Button -->
+      <div class="cart-item-image">
         <img src="${p['Item Image']}" alt="${p['Item Name']}">
-        <span>${p['Item Name']}</span>
+        <button class="remove-under-image" data-idx="${idx}">Remove Item</button>
       </div>
+
+      <!-- Column 2: Item Name -->
+      <div class="cart-item-name-text">${p['Item Name']}</div>
+
+      <!-- Column 3: Quantity -->
       <div class="cart-item-qty">
         <select data-idx="${idx}">
-          ${[...Array(11).keys()].map(q => `<option value="${q}" ${q == p.qty ? 'selected' : ''}>${q}</option>`).join('')}
+          ${[...Array(11).keys()]
+            .map(q => `<option value="${q}" ${q == p.qty ? 'selected' : ''}>${q}</option>`)
+            .join('')}
         </select>
       </div>
+
+      <!-- Column 4: Weight -->
       <div class="cart-item-weight">${(p['Item Weight'] * p.qty).toFixed(2)} kg</div>
-      <div class="cart-item-cad">${(p['Item Price CAD'] * p.qty).toFixed(2)} CAD</div>
-      <div class="cart-item-bdt">${(p['Item Price CAD'] * rate * p.qty).toFixed(2)} BDT</div>
-      <div class="cart-item-action">
-        <button data-idx="${idx}">Remove Item</button>
+
+      <!-- Column 5: Price CAD / BDT -->
+      <div class="cart-item-price">
+        <div>${(p['Item Price CAD'] * p.qty).toFixed(2)} CAD</div>
+        <div>${(p['Item Price CAD'] * rate * p.qty).toFixed(2)} BDT</div>
       </div>
     `;
+
     container.appendChild(div);
   });
+
+
+
+
+
+
+
 
   // --- Update Cart Modal Totals (2x2 grid) ---
   const modalTotals = document.querySelector('#cart-modal .cart-modal-totals-grid');

@@ -77,3 +77,73 @@ body {margin:0;font-family:Arial,sans-serif;background:#f9f9f9;color:#333}
 #review-order-form label {margin-top:6px;font-weight:bold}
 #review-order-form input,#review-order-form select {width:100%;margin-top:2px;padding:6px;border:1px solid #ccc;border-radius:6px;font-size:14px}
 #review-order-status {color:#007bff;font-size:13px;margin-top:5px}
+
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* Column 1: Image + Remove button stacked */
+.cart-item-image {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100px; /* adjust as needed */
+}
+
+.cart-item-image img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.cart-item-image button.remove-under-image {
+  padding: 4px 6px;
+  font-size: 12px;
+  background: #d9534f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cart-item-image button.remove-under-image:hover {
+  background: #c9302c;
+}
+
+/* Column 2: Item Name */
+.cart-item-name-text {
+  flex: 1; /* take remaining space */
+  font-weight: 500;
+}
+
+/* Column 3: Quantity selector */
+.cart-item-qty select {
+  padding: 4px;
+  font-size: 14px;
+  width: 50px;
+}
+
+/* Column 4: Weight */
+.cart-item-weight {
+  width: 80px;
+  text-align: right;
+}
+
+/* Column 5: Price CAD / BDT stacked */
+.cart-item-price {
+  width: 100px;
+  text-align: right;
+}
+
+.cart-item-price div {
+  line-height: 1.2;
+}
+
+
