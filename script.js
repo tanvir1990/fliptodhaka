@@ -158,15 +158,19 @@ function renderCartModal() {
       <!-- Column 4: Weight -->
       <div class="cart-item-weight">${(p['Item Weight'] * p.qty).toFixed(2)} kg</div>
 
-      <!-- Column 5: Price CAD / BDT -->
+      <!-- Column 5: Price CAD / BDT stacked -->
       <div class="cart-item-price">
-        <div>${(p['Item Price CAD'] * p.qty).toFixed(2)} CAD</div>
+        <div>${(p['Item Price CAD'] * p.qty).toFixed(2)} CAD / </div>
         <div>${(p['Item Price CAD'] * rate * p.qty).toFixed(2)} BDT</div>
       </div>
     `;
 
     container.appendChild(div);
   });
+
+
+
+
 
 
 

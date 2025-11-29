@@ -138,12 +138,16 @@ body {margin:0;font-family:Arial,sans-serif;background:#f9f9f9;color:#333}
 
 /* Column 5: Price CAD / BDT stacked */
 .cart-item-price {
-  width: 100px;
+  width: 100px;       /* or slightly larger if needed */
   text-align: right;
+  display: flex;
+  flex-direction: column; /* stack CAD / BDT */
+  align-items: flex-end;  /* right-align stacked values */
 }
 
 .cart-item-price div {
   line-height: 1.2;
+  white-space: nowrap; /* keep each value + unit together */
 }
 
 
