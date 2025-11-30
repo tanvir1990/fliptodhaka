@@ -32,23 +32,36 @@ module.exports = async (req, res) => {
     }
 
     // --- Generate Order ID ---
-    function generateOrderId(customerName) {
-      const estDate = new Date(new Date().toLocaleString("en-US", { timeZone: "America/New_York" }));
-      const yyyy = estDate.getFullYear();
-      const mm = String(estDate.getMonth() + 1).padStart(2, "0");
-      const dd = String(estDate.getDate()).padStart(2, "0");
+    function generateOrderId(customerName, deliveryDate) {
+      // Normalize deliveryDate into YYYY-MM-DD
+      const d = new Date(deliveryDate);
+      const deliveryYYYY = d.getFullYear();
+      const deliveryMM = String(d.getMonth() + 1).padStart(2, "0");
+      const deliveryDD = String(d.getDate()).padStart(2, "0");
+      const normalizedDeliveryDate = `${deliveryYYYY}-${deliveryMM}-${deliveryDD}`;
 
-      let hours = estDate.getHours();
-      const minutes = String(estDate.getMinutes()).padStart(2, "0");
+      // Current time in EST
+      const estNow = new Date(
+        new Date().toLocaleString("en-US", { timeZone: "America/New_York" })
+      );
+
+      const yyyy = estNow.getFullYear();
+      const mm = String(estNow.getMonth() + 1).padStart(2, "0");
+      const dd = String(estNow.getDate()).padStart(2, "0");
+
+      let hours = estNow.getHours();
+      const minutes = String(estNow.getMinutes()).padStart(2, "0");
       const ampm = hours >= 12 ? "PM" : "AM";
       hours = hours % 12 || 12;
       const hh = String(hours).padStart(2, "0");
 
       const cleanName = customerName.replace(/\s+/g, "").toLowerCase();
-      return `${cleanName}-${yyyy}-${mm}-${dd}-${hh}-${minutes}-${ampm}`;
+
+      return `${cleanName}-${normalizedDeliveryDate}-${yyyy}-${mm}-${dd}-${hh}-${minutes}-${ampm}`;
     }
 
-    const orderId = generateOrderId(name);
+
+    const orderId = generateOrderId(name, deliveryDate);
 
     // --- Brevo Environment Variables ---
     const BREVO_API_KEY = process.env.BREVO_API_KEY;
