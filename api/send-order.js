@@ -22,9 +22,9 @@ module.exports = async (req, res) => {
     for await (const chunk of req) buffers.push(chunk);
     const bodyString = Buffer.concat(buffers).toString();
     const reqBody = JSON.parse(bodyString);
-    console.log("📥 Incoming order:", reqBody);
+    console.log("📥 Incoming order Details From User Input:", reqBody);
 
-    const { name, email, phone, deliveryMethod, orderDetails, totalCAD, totalBDT, totalWeight } = reqBody;
+    const { name, email, phone, deliveryDate, orderDetails, totalCAD, totalBDT, totalWeight } = reqBody;
 
     if (!name || !phone || !orderDetails) {
       console.warn("⚠️ Missing required fields:", { name, phone, orderDetails });
@@ -76,7 +76,7 @@ module.exports = async (req, res) => {
         customerName: name,
         customerPhone: phone,
         customerEmail: email,
-        deliveryDateTime: deliveryMethod,
+        deliveryDate: deliveryDate,
         orderDetails,
         totalCAD,
         totalBDT,
@@ -89,7 +89,7 @@ module.exports = async (req, res) => {
     // --- Customer Email Data (unchanged for now) ---
     const customerEmailData = {
       templateId: CUSTOMER_TEMPLATE_ID,
-      params: { name, phone, email, deliveryMethod, orderDetails, totalCAD, totalBDT, totalWeight },
+      params: { name, phone, email, deliveryDate, orderDetails, totalCAD, totalBDT, totalWeight },
       sender: { email: BREVO_SENDER_EMAIL, name: "Flip to Dhaka" },
       to: [{ email }],
     };

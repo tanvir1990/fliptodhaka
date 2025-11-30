@@ -1,0 +1,41 @@
+<html lang="en">
+  <body style="font-family: Arial, sans-serif; background-color: #f7f7f7; margin: 0; padding: 20px;">
+
+    <div style="max-width: 600px; margin: auto; background: #ffffff; padding: 25px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+
+        <h2 style="margin-top: 0; font-size: 22px; color: #222;">
+            📦 New Order Received from <span style="color:#0073e6;">{{params.customerName}}</span>
+        </h2>
+
+        <p style="margin: 0 0 15px 0; font-size: 14px; color: #666;">
+            A new order has been placed. Please review the details below.
+        </p>
+
+        <div style="border-top: 1px solid #eee; padding-top: 15px; margin-top: 10px;">
+
+            <h3 style="font-size: 18px; margin-bottom: 8px; color:#444;">🧾 Order Summary</h3>
+            <p><strong>Order ID:</strong> {{params.orderId}}</p>
+            <p><strong>Customer Name:</strong> {{params.customerName}}</p>
+            <p><strong>Phone:</strong> {{params.customerPhone}}</p>
+            <p><strong>Email:</strong> {{params.customerEmail}}</p>
+            <p><strong>Delivery Date:</strong> {{params.deliveryDate}}</p>
+
+        </div>
+
+        <div style="border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+
+            <h3 style="font-size: 18px; margin-bottom: 8px; color:#444;">🛒 Order Details</h3>
+            <p style="white-space: pre-line; line-height: 1.5;">
+                {{params.orderDetails}}
+            </p>
+        </div>
+
+        <div style="border-top: 1px solid #eee; padding-top: 15px; margin-top: 15px;">
+            <h3 style="font-size: 18px; margin-bottom: 8px; color:#444;">💰 Payment Summary</h3>
+            <p><strong>Total (CAD):</strong> {{params.totalCAD}}</p>
+            <p><strong>Total (BDT):</strong> {{params.totalBDT}}</p>
+        </div>
+
+    </div>
+  </body>
+</html>
