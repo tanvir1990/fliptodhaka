@@ -1,0 +1,11 @@
+{
+  "orderId": "John-2025-11-29-03-45-PM",
+  "customerName": "John Doe",
+  "customerPhone": "+1234567890",
+  "customerEmail": "john@example.com",
+  "deliveryDateTime": "Tue, Dec 2, 2025 05:00 PM",
+  "orderDetails": "1x Product A\n2x Product B",
+  "totalCAD": "50",
+  "totalBDT": "4200",
+  "totalWeight": "3.2"
+}
